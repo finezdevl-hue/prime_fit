@@ -7,6 +7,8 @@ class PrimeFitAdminSite(AdminSite):
     site_header = '⚡ PRIME FIT Apparels Admin'
     site_title = 'PRIME FIT Admin'
     index_title = 'Dashboard'
+    index_template = 'admin/index.html'
+    login_template = 'admin/login.html'
 
     def index(self, request, extra_context=None):
         extra_context = extra_context or {}

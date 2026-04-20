@@ -1,0 +1,46 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}{% if product %}Edit Product{% else %}Add Product{% endif %} – Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+.form-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:28px; max-width:900px; margin-top:20px; }
+.form-row { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+.form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+label { color:#0a0a0a; font-size:14px; }
+input, textarea, select { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; color:#0a0a0a; }
+textarea { min-height:120px; }
+.button-primary { display:inline-block; padding:12px 22px; border-radius:12px; background:#c9a227; color:#000; text-decoration:none; font-weight:700; }
+.button-secondary { display:inline-block; padding:12px 22px; border-radius:12px; background:#f4f4f4; color:#0a0a0a; text-decoration:none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+  <div>
+    <h1 style="color:#fff;margin-bottom:6px">{% if product %}Edit Product{% else %}Add Product{% endif %}</h1>
+    <p style="color:#aaa;margin:0">Manage product details and inventory for the store.</p>
+  </div>
+  <a href="{% url 'admin_products' %}" class="button-secondary">Back to Products</a>
+</div>
+
+<div class="form-card">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-row">
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small style="color:#888;">{{ field.help_text }}</small>{% endif %}
+        {% for error in field.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="button-primary">Save Product</button>
+  </form>
+</div>
+{% endblock %}

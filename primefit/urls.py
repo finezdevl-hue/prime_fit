@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from primefit.admin_site import PrimeFitAdminSite
+from store import views as store_views
 
 # Use custom admin site
 admin.site = PrimeFitAdminSite()
@@ -13,6 +14,7 @@ admin.site.index_title = "Welcome to PRIME FIT Control Panel"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin-panel/', store_views.admin_panel, name='admin_panel'),
     path('', include('store.urls')),
 ]
 

@@ -1,0 +1,102 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Admin Panel – PRIME FIT{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-bottom:24px; }
+.metric-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:22px; color:#0a0a0a; }
+.metric-card h3 { margin:0 0 8px; font-size:14px; letter-spacing:1px; color:#0a0a0a; }
+.metric-card p { margin:0; font-size:32px; font-weight:700; }
+.section-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:20px; padding:24px; margin-bottom:24px; color:#0a0a0a; }
+.section-card h2 { margin-top:0; color:#0a0a0a; font-size:20px; }
+.table-custom { width:100%; border-collapse:collapse; }
+.table-custom th, .table-custom td { padding:12px 10px; border-bottom:1px solid rgba(0,0,0,.08); }
+.table-custom th { text-align:left; color:#0a0a0a; font-size:13px; letter-spacing:1px; }
+.table-custom td { color:#0a0a0a; font-size:14px; }
+.link-button { display:inline-block; padding:10px 18px; border-radius:10px; background:#c9a227; color:#000; text-decoration:none; font-weight:700; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+  <div>
+    <h1 style="margin:0;color:#fff;font-size:32px;letter-spacing:2px;">Admin Panel</h1>
+    <p style="margin:6px 0 0;color:#aaa;">Manage products, orders, users and site settings from a custom dashboard.</p>
+  </div>
+  <a href="/admin/" class="link-button">Open Django Admin</a>
+</div>
+
+<div class="dashboard-grid">
+  <div class="metric-card">
+    <h3>Total Orders</h3>
+    <p>{{ total_orders }}</p>
+  </div>
+  <div class="metric-card">
+    <h3>Active Products</h3>
+    <p>{{ total_products }}</p>
+  </div>
+  <div class="metric-card">
+    <h3>Customers</h3>
+    <p>{{ total_users }}</p>
+  </div>
+  <div class="metric-card">
+    <h3>Unread Messages</h3>
+    <p>{{ unread_msgs }}</p>
+  </div>
+</div>
+
+<div class="section-card">
+  <h2>Quick Actions</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:12px;">
+    <a href="{% url 'admin_products' %}" class="link-button">Manage Products</a>
+    <a href="{% url 'admin_categories' %}" class="link-button">Manage Categories</a>
+    <a href="{% url 'admin_panel' %}" class="link-button">Dashboard</a>
+    <a href="/admin/store/contactmessage/" class="link-button">Messages</a>
+    <a href="/admin/store/sitesettings/" class="link-button">Site Settings</a>
+  </div>
+</div>
+
+<div class="section-card">
+  <h2>Featured Products</h2>
+  <table class="table-custom">
+    <thead>
+      <tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th></tr>
+    </thead>
+    <tbody>
+      {% for product in featured_products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category.name }}</td>
+        <td>₹{{ product.get_display_price }}</td>
+        <td>{{ product.stock }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No featured products available.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="section-card">
+  <h2>Recent Orders</h2>
+  <table class="table-custom">
+    <thead>
+      <tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      {% for order in recent_orders %}
+      <tr>
+        <td>#{{ order.order_number }}</td>
+        <td>{{ order.full_name }}</td>
+        <td>₹{{ order.total_amount }}</td>
+        <td>{{ order.get_status_display }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No recent orders yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

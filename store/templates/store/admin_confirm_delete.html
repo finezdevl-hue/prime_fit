@@ -1,0 +1,26 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Confirm Delete – Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+.confirm-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:28px; max-width:640px; margin-top:20px; color:#0a0a0a; }
+.button-danger, .button-secondary { display:inline-block; padding:12px 22px; border-radius:12px; text-decoration:none; font-weight:700; }
+.button-danger { background:#ef4444; color:#fff; }
+.button-secondary { background:#f4f4f4; color:#0a0a0a; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="confirm-card">
+  <h1 style="color:#fff;">Confirm Delete</h1>
+  <p style="color:#aaa;">Are you sure you want to delete this {{ object_name }}?</p>
+  <p style="color:#fff;font-weight:700;">{{ object }}</p>
+  <form method="post" style="display:flex;gap:12px;margin-top:20px;">
+    {% csrf_token %}
+    <button type="submit" class="button-danger">Delete</button>
+    <a href="{% url cancel_url %}" class="button-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse
@@ -9,6 +10,7 @@ import uuid
 import json
 from .models import (Product, Category, Banner, Cart, CartItem,
                      Order, OrderItem, Wishlist, Review, ContactMessage, SiteSettings)
+from .forms import CategoryForm, ProductForm
 
 
 def get_or_create_cart(request):
@@ -246,10 +248,105 @@ def login_view(request):
         if user:
             login(request, user)
             messages.success(request, f'Welcome back, {user.first_name or user.username}!')
+            if user.is_staff or user.is_superuser:
+                return redirect(request.GET.get('next', 'admin_panel'))
             return redirect(request.GET.get('next', 'home'))
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'store/login.html')
+
+
+@staff_member_required(login_url='login')
+def admin_panel(request):
+    total_orders = Order.objects.count()
+    total_products = Product.objects.filter(is_active=True).count()
+    total_users = User.objects.filter(is_staff=False).count()
+    unread_msgs = ContactMessage.objects.filter(is_read=False).count()
+    active_categories = Category.objects.filter(is_active=True)
+    featured_products = Product.objects.filter(is_active=True, is_featured=True)[:6]
+    recent_orders = Order.objects.order_by('-created_at')[:5]
+
+    context = {
+        'total_orders': total_orders,
+        'total_products': total_products,
+        'total_users': total_users,
+        'unread_msgs': unread_msgs,
+        'active_categories': active_categories,
+        'featured_products': featured_products,
+        'recent_orders': recent_orders,
+    }
+    return render(request, 'store/admin_panel.html', context)
+
+
+@staff_member_required(login_url='login')
+def admin_products(request):
+    products = Product.objects.select_related('category').order_by('-created_at')
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    return render(request, 'store/admin_products.html', {'products': products, 'query': query})
+
+
+@staff_member_required(login_url='login')
+def admin_product_form(request, product_id=None):
+    product = None
+    if product_id:
+        product = get_object_or_404(Product, id=product_id)
+    form = ProductForm(request.POST or None, request.FILES or None, instance=product)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Product saved successfully.')
+        return redirect('admin_products')
+    return render(request, 'store/admin_product_form.html', {'form': form, 'product': product})
+
+
+@staff_member_required(login_url='login')
+def admin_product_delete(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Product deleted successfully.')
+        return redirect('admin_products')
+    return render(request, 'store/admin_confirm_delete.html', {
+        'object': product,
+        'cancel_url': 'admin_products',
+        'delete_url': 'admin_product_delete',
+        'object_name': 'product',
+    })
+
+
+@staff_member_required(login_url='login')
+def admin_categories(request):
+    categories = Category.objects.order_by('name')
+    return render(request, 'store/admin_categories.html', {'categories': categories})
+
+
+@staff_member_required(login_url='login')
+def admin_category_form(request, category_id=None):
+    category = None
+    if category_id:
+        category = get_object_or_404(Category, id=category_id)
+    form = CategoryForm(request.POST or None, request.FILES or None, instance=category)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Category saved successfully.')
+        return redirect('admin_categories')
+    return render(request, 'store/admin_category_form.html', {'form': form, 'category': category})
+
+
+@staff_member_required(login_url='login')
+def admin_category_delete(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        category.delete()
+        messages.success(request, 'Category deleted successfully.')
+        return redirect('admin_categories')
+    return render(request, 'store/admin_confirm_delete.html', {
+        'object': category,
+        'cancel_url': 'admin_categories',
+        'delete_url': 'admin_category_delete',
+        'object_name': 'category',
+    })
 
 
 def register_view(request):
