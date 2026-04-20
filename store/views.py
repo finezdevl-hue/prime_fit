@@ -10,7 +10,7 @@ import uuid
 import json
 from .models import (Product, Category, Banner, Cart, CartItem,
                      Order, OrderItem, Wishlist, Review, ContactMessage, SiteSettings)
-from .forms import CategoryForm, ProductForm
+from .forms import CategoryForm, ProductForm, SiteSettingsForm
 
 
 def get_or_create_cart(request):
@@ -347,6 +347,54 @@ def admin_category_delete(request, category_id):
         'delete_url': 'admin_category_delete',
         'object_name': 'category',
     })
+
+
+@staff_member_required(login_url='login')
+def admin_site_settings(request):
+    settings = SiteSettings.get_settings()
+    form = SiteSettingsForm(request.POST or None, request.FILES or None, instance=settings)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Site settings updated successfully.')
+        return redirect('admin_site_settings')
+    return render(request, 'store/admin_site_settings.html', {'form': form, 'settings': settings})
+
+
+@staff_member_required(login_url='login')
+def admin_messages(request):
+    messages_list = ContactMessage.objects.order_by('-created_at')
+    query = request.GET.get('q')
+    if query:
+        messages_list = messages_list.filter(
+            Q(name__icontains=query) | Q(email__icontains=query) | Q(subject__icontains=query)
+        )
+    unread_count = ContactMessage.objects.filter(is_read=False).count()
+    return render(request, 'store/admin_messages.html', {
+        'messages': messages_list,
+        'query': query,
+        'unread_count': unread_count
+    })
+
+
+@staff_member_required(login_url='login')
+def admin_message_detail(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'mark_read':
+            message.is_read = True
+            message.save()
+            messages.success(request, 'Message marked as read.')
+        elif action == 'mark_unread':
+            message.is_read = False
+            message.save()
+            messages.success(request, 'Message marked as unread.')
+        elif action == 'delete':
+            message.delete()
+            messages.success(request, 'Message deleted successfully.')
+            return redirect('admin_messages')
+        return redirect('admin_message_detail', message_id=message.id)
+    return render(request, 'store/admin_message_detail.html', {'message': message})
 
 
 def register_view(request):

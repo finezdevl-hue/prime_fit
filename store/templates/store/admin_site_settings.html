@@ -1,0 +1,171 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Site Settings – Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+.form-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:28px; max-width:1200px; margin-top:20px; }
+.form-row { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+.form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+label { color:#0a0a0a; font-size:14px; font-weight:600; }
+input, textarea, select { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; color:#0a0a0a; }
+textarea { min-height:80px; }
+.button-primary { display:inline-block; padding:12px 22px; border-radius:12px; background:#c9a227; color:#000; text-decoration:none; font-weight:700; }
+.button-secondary { display:inline-block; padding:12px 22px; border-radius:12px; background:#f4f4f4; color:#0a0a0a; text-decoration:none; }
+.section-title { color:#0a0a0a; font-size:18px; font-weight:600; margin:24px 0 12px; border-bottom:2px solid #c9a227; padding-bottom:6px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+  <div>
+    <h1 style="color:#fff;margin-bottom:6px">Site Settings</h1>
+    <p style="color:#aaa;margin:0">Configure homepage hero section, stats, and global site settings.</p>
+  </div>
+  <a href="{% url 'admin_panel' %}" class="button-secondary">Back to Dashboard</a>
+</div>
+
+<div class="form-card">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="section-title">Hero Section</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="{{ form.hero_image.id_for_label }}">{{ form.hero_image.label }}</label>
+        {{ form.hero_image }}
+        {% if form.hero_image.help_text %}<small style="color:#888;">{{ form.hero_image.help_text }}</small>{% endif %}
+        {% for error in form.hero_image.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_eyebrow.id_for_label }}">{{ form.hero_eyebrow.label }}</label>
+        {{ form.hero_eyebrow }}
+        {% for error in form.hero_eyebrow.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="{{ form.hero_title_line1.id_for_label }}">{{ form.hero_title_line1.label }}</label>
+        {{ form.hero_title_line1 }}
+        {% for error in form.hero_title_line1.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_title_line2.id_for_label }}">{{ form.hero_title_line2.label }}</label>
+        {{ form.hero_title_line2 }}
+        {% for error in form.hero_title_line2.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_title_line3.id_for_label }}">{{ form.hero_title_line3.label }}</label>
+        {{ form.hero_title_line3 }}
+        {% for error in form.hero_title_line3.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_title_line4.id_for_label }}">{{ form.hero_title_line4.label }}</label>
+        {{ form.hero_title_line4 }}
+        {% for error in form.hero_title_line4.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.hero_subtitle.id_for_label }}">{{ form.hero_subtitle.label }}</label>
+      {{ form.hero_subtitle }}
+      {% for error in form.hero_subtitle.errors %}
+      <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="{{ form.hero_btn1_text.id_for_label }}">{{ form.hero_btn1_text.label }}</label>
+        {{ form.hero_btn1_text }}
+        {% for error in form.hero_btn1_text.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_btn1_link.id_for_label }}">{{ form.hero_btn1_link.label }}</label>
+        {{ form.hero_btn1_link }}
+        {% for error in form.hero_btn1_link.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_btn2_text.id_for_label }}">{{ form.hero_btn2_text.label }}</label>
+        {{ form.hero_btn2_text }}
+        {% for error in form.hero_btn2_text.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.hero_btn2_link.id_for_label }}">{{ form.hero_btn2_link.label }}</label>
+        {{ form.hero_btn2_link }}
+        {% for error in form.hero_btn2_link.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="section-title">Statistics</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="{{ form.stat1_num.id_for_label }}">{{ form.stat1_num.label }}</label>
+        {{ form.stat1_num }}
+        {% for error in form.stat1_num.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.stat1_label.id_for_label }}">{{ form.stat1_label.label }}</label>
+        {{ form.stat1_label }}
+        {% for error in form.stat1_label.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.stat2_num.id_for_label }}">{{ form.stat2_num.label }}</label>
+        {{ form.stat2_num }}
+        {% for error in form.stat2_num.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.stat2_label.id_for_label }}">{{ form.stat2_label.label }}</label>
+        {{ form.stat2_label }}
+        {% for error in form.stat2_label.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.stat3_num.id_for_label }}">{{ form.stat3_num.label }}</label>
+        {{ form.stat3_num }}
+        {% for error in form.stat3_num.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.stat3_label.id_for_label }}">{{ form.stat3_label.label }}</label>
+        {{ form.stat3_label }}
+        {% for error in form.stat3_label.errors %}
+        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="button-primary">Save Settings</button>
+  </form>
+</div>
+{% endblock %}
