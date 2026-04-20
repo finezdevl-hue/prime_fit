@@ -39,6 +39,11 @@ DJANGO_ALLOWED_HOSTS=your-app-name.onrender.com
 SECRET_KEY=your-secure-random-key-here
 DATABASE_URL=sqlite:///db.sqlite3
 CSRF_TRUSTED_ORIGINS=https://your-app-name.onrender.com
+
+# Admin credentials (auto-created during build)
+ADMIN_USER=admin
+ADMIN_EMAIL=admin@primefit.com
+ADMIN_PASSWORD=your-secure-admin-password
 ```
 
 > **Note**: Generate a secure SECRET_KEY:
@@ -58,8 +63,13 @@ For production, use PostgreSQL instead of SQLite:
 #### 5. Deploy
 Push to GitHub - Render will automatically:
 - Install dependencies
-- Run `build.sh` (collects static files, runs migrations)
+- Run `build.sh` (collects static files, runs migrations, creates superuser)
 - Start the web service
+
+**Admin Login:**
+- URL: `https://your-app-name.onrender.com/admin/`
+- Username: Value of `ADMIN_USER` env var (default: `admin`)
+- Password: Value of `ADMIN_PASSWORD` env var
 
 ### Media Files (Important!)
 **Render free tier has ephemeral storage** - files deleted on redeploy.
