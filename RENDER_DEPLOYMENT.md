@@ -63,13 +63,20 @@ For production, use PostgreSQL instead of SQLite:
 #### 5. Deploy
 Push to GitHub - Render will automatically:
 - Install dependencies
-- Run `build.sh` (collects static files, runs migrations, creates superuser)
+- Run `build.sh` (collects static files, runs migrations, **loads demo data**, creates superuser)
 - Start the web service
 
 **Admin Login:**
-- URL: `https://your-app-name.onrender.com/admin/`
+- URL: `https://prime-fit.onrender.com/admin/`
 - Username: Value of `ADMIN_USER` env var (default: `admin`)
 - Password: Value of `ADMIN_PASSWORD` env var
+
+**Demo Data Included:**
+- ✅ 6 Product Categories (T-Shirts, Hoodies, Jackets, Pants, Shorts, Accessories)
+- ✅ 12 Sample Products with pricing and descriptions
+- ✅ 3 Homepage Banners
+- ✅ Site Settings configured
+- ✅ Sample product reviews
 
 ### Media Files (Important!)
 **Render free tier has ephemeral storage** - files deleted on redeploy.
