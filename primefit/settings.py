@@ -8,7 +8,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-primefit-sports-appar
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1,prime-fit.onrender.com,www.prime-fit.onrender.com', cast=Csv())
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'store.apps.StoreConfig',
