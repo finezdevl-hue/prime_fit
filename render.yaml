@@ -10,7 +10,9 @@ services:
       - key: DEBUG
         value: false
       - key: DJANGO_ALLOWED_HOSTS
-        value: primefit-django.onrender.com,www.primefit-django.onrender.com
+        value: prime-fit.onrender.com,www.prime-fit.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://prime-fit.onrender.com
       - key: SECRET_KEY
         fromFile: /etc/secrets/.env
       - key: DATABASE_URL

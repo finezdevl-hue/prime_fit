@@ -8,7 +8,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-primefit-sports-appar
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1,prime-fit.onrender.com,www.prime-fit.onrender.com', cast=Csv())
 
 INSTALLED_APPS = [
     'store.apps.StoreConfig',
@@ -92,7 +92,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # CSRF Settings
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='localhost,127.0.0.1', cast=Csv())
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='localhost,127.0.0.1,https://prime-fit.onrender.com', cast=Csv())
 CSRF_TRUSTED_ORIGINS = ['https://' + host if not host.startswith('http') else host for host in CSRF_TRUSTED_ORIGINS]
 
 CSRF_COOKIE_SECURE = not DEBUG

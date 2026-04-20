@@ -35,10 +35,10 @@ In Render dashboard, go to Environment:
 
 ```
 DEBUG=False
-DJANGO_ALLOWED_HOSTS=your-app-name.onrender.com
+DJANGO_ALLOWED_HOSTS=prime-fit.onrender.com,www.prime-fit.onrender.com
 SECRET_KEY=your-secure-random-key-here
 DATABASE_URL=sqlite:///db.sqlite3
-CSRF_TRUSTED_ORIGINS=https://your-app-name.onrender.com
+CSRF_TRUSTED_ORIGINS=https://prime-fit.onrender.com
 
 # Admin credentials (auto-created during build)
 ADMIN_USER=admin
