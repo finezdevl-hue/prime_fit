@@ -1,0 +1,401 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}PRIME FIT Apparels{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --gold: #C9A227;
+  --gold-light: #E8C84A;
+  --gold-dark: #A07C15;
+  --black: #0a0a0a;
+  --black-2: #111111;
+  --black-3: #1a1a1a;
+  --black-4: #222222;
+  --white: #ffffff;
+  --white-2: #f8f8f8;
+  --white-3: #eeeeee;
+  --gray: #888888;
+  --gray-light: #cccccc;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-body: 'Jost', sans-serif;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-gold: 0 0 20px rgba(201,162,39,0.3);
+  --shadow-dark: 0 20px 60px rgba(0,0,0,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--white);color:var(--black);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+button{cursor:pointer;border:none;background:none;font-family:var(--font-body)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+/* TOPBAR */
+.topbar{background:var(--black);color:var(--gold);text-align:center;padding:8px;font-size:12px;letter-spacing:2px;font-weight:500}
+.topbar a{color:var(--gold-light)}
+
+/* NAVBAR */
+.navbar{background:var(--black);padding:0 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;border-bottom:1px solid rgba(201,162,39,0.2);min-height:70px}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-logo{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;color:var(--black);letter-spacing:1px;font-weight:900}
+.nav-brand-text{display:flex;flex-direction:column;line-height:1}
+.nav-brand-text .brand-main{font-family:var(--font-display);font-size:22px;color:var(--gold);letter-spacing:3px}
+.nav-brand-text .brand-sub{font-size:9px;color:var(--gray);letter-spacing:4px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-links a{color:var(--white-3);padding:8px 14px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;transition:var(--transition);position:relative;border-radius:4px}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-links .dropdown{position:relative}
+.nav-links .dropdown-menu{position:absolute;top:100%;left:0;background:var(--black-2);border:1px solid rgba(201,162,39,0.2);border-radius:8px;min-width:180px;padding:8px 0;opacity:0;visibility:hidden;transform:translateY(10px);transition:var(--transition);z-index:100}
+.nav-links .dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.nav-links .dropdown-menu a{display:block;padding:10px 20px;font-size:12px;border-radius:0}
+.nav-icons{display:flex;align-items:center;gap:4px}
+.nav-icon-btn{color:var(--white-3);padding:10px;font-size:16px;transition:var(--transition);border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.nav-icon-btn:hover{color:var(--gold);background:rgba(201,162,39,0.1)}
+.cart-badge{position:absolute;top:2px;right:2px;background:var(--gold);color:var(--black);width:16px;height:16px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hamburger{display:none;color:var(--white);font-size:22px;cursor:pointer;padding:8px}
+.mobile-menu{display:none;position:fixed;top:0;left:0;width:80%;max-width:300px;height:100vh;background:var(--black-2);z-index:2000;padding:30px 20px;transform:translateX(-100%);transition:var(--transition);border-right:1px solid rgba(201,162,39,0.2)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{display:block;color:var(--white-3);padding:14px 0;font-size:14px;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.mobile-menu a:hover{color:var(--gold)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1999}
+.overlay.show{display:block}
+
+/* MESSAGES */
+.messages-container{position:fixed;top:80px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:8px;max-width:320px}
+.msg{padding:12px 16px;border-radius:8px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;animation:slideIn 0.3s ease;box-shadow:var(--shadow-dark)}
+.msg-success{background:var(--black-2);border-left:4px solid #10b981;color:var(--white)}
+.msg-error{background:var(--black-2);border-left:4px solid #ef4444;color:var(--white)}
+.msg-info{background:var(--black-2);border-left:4px solid var(--gold);color:var(--white)}
+.msg-warning{background:var(--black-2);border-left:4px solid #f59e0b;color:var(--white)}
+.msg-close{margin-left:auto;cursor:pointer;opacity:0.6}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 28px;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:var(--transition);cursor:pointer}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--black)}
+.btn-gold:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));transform:translateY(-2px);box-shadow:var(--shadow-gold)}
+.btn-outline-gold{border:2px solid var(--gold);color:var(--gold);background:transparent}
+.btn-outline-gold:hover{background:var(--gold);color:var(--black)}
+.btn-black{background:var(--black);color:var(--white);border:2px solid var(--black-4)}
+.btn-black:hover{border-color:var(--gold);color:var(--gold)}
+.btn-white{background:var(--white);color:var(--black)}
+.btn-white:hover{background:var(--white-3)}
+.btn-lg{padding:16px 40px;font-size:14px}
+.btn-sm{padding:8px 18px;font-size:11px}
+
+/* SECTION HEADERS */
+.section-header{text-align:center;margin-bottom:50px}
+.section-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600;display:block;margin-bottom:10px}
+.section-title{font-family:var(--font-display);font-size:clamp(36px,5vw,60px);letter-spacing:3px;color:var(--black);line-height:1}
+.section-title.white{color:var(--white)}
+.section-divider{width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin:16px auto;border-radius:2px}
+
+/* PRODUCT CARD */
+.product-card{background:var(--white);border-radius:12px;overflow:hidden;transition:var(--transition);position:relative;box-shadow:0 2px 15px rgba(0,0,0,0.08)}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.product-card-img{position:relative;padding-top:110%;overflow:hidden;background:var(--white-2)}
+.product-card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.product-card:hover .product-card-img img{transform:scale(1.08)}
+.product-card-img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--black-3),var(--black-4));color:var(--gold);font-family:var(--font-display);font-size:32px;letter-spacing:2px}
+.product-badges{position:absolute;top:12px;left:12px;display:flex;flex-direction:column;gap:6px}
+.badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.badge-sale{background:var(--gold);color:var(--black)}
+.badge-new{background:var(--black);color:var(--gold);border:1px solid var(--gold)}
+.badge-hot{background:#ef4444;color:white}
+.product-actions{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateX(10px);transition:var(--transition)}
+.product-card:hover .product-actions{opacity:1;transform:translateX(0)}
+.action-btn{width:36px;height:36px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--black);box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:var(--transition)}
+.action-btn:hover{background:var(--gold);color:var(--black)}
+.action-btn.active{background:var(--gold);color:var(--black)}
+.product-card-body{padding:16px}
+.product-category{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:600}
+.product-name{font-size:14px;font-weight:600;margin:4px 0 8px;color:var(--black);line-height:1.3}
+.product-price{display:flex;align-items:center;gap:8px}
+.price-current{font-size:16px;font-weight:700;color:var(--black)}
+.price-original{font-size:13px;color:var(--gray);text-decoration:line-through}
+.price-discount{font-size:11px;background:rgba(201,162,39,0.15);color:var(--gold-dark);padding:2px 8px;border-radius:20px;font-weight:600}
+.product-sizes{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.size-dot{width:26px;height:26px;border:1px solid var(--white-3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--gray);transition:var(--transition)}
+.product-card:hover .size-dot{border-color:var(--gold);color:var(--black)}
+
+/* FOOTER */
+footer{background:var(--black);color:var(--white-3);padding:60px 5% 30px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:40px;margin-bottom:50px}
+.footer-brand .brand-main{font-family:var(--font-display);font-size:28px;color:var(--gold);letter-spacing:3px}
+.footer-brand .brand-sub{font-size:9px;color:var(--gray);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;display:block}
+.footer-brand p{font-size:13px;line-height:1.8;color:var(--gray);margin-bottom:16px}
+.footer-address{font-size:12px;line-height:2;color:var(--gray)}
+.footer-address i{color:var(--gold);margin-right:8px;width:16px}
+.footer-title{font-family:var(--font-display);font-size:18px;letter-spacing:2px;color:var(--white);margin-bottom:20px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:var(--gray);transition:var(--transition);display:flex;align-items:center;gap:8px}
+.footer-links a:hover{color:var(--gold);padding-left:4px}
+.footer-social{display:flex;gap:12px;margin-top:20px}
+.social-btn{width:38px;height:38px;border:1px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:var(--transition);font-size:14px}
+.social-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,0.1)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-bottom p{font-size:12px;color:var(--gray)}
+.footer-bottom .gold{color:var(--gold)}
+
+/* FORMS */
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--black);margin-bottom:8px}
+.form-control{width:100%;padding:12px 16px;border:2px solid var(--white-3);border-radius:8px;font-family:var(--font-body);font-size:14px;color:var(--black);background:var(--white);transition:var(--transition);outline:none}
+.form-control:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,39,0.1)}
+.form-control.dark{background:var(--black-3);border-color:rgba(255,255,255,0.1);color:var(--white)}
+.form-control.dark:focus{border-color:var(--gold)}
+select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C9A227' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+
+/* BREADCRUMB */
+.breadcrumb{padding:12px 5%;background:var(--white-2);font-size:12px;letter-spacing:1px}
+.breadcrumb a{color:var(--gray)}
+.breadcrumb a:hover{color:var(--gold)}
+.breadcrumb span{color:var(--gold-dark);margin:0 8px}
+
+/* PAGE HERO */
+.page-hero{background:var(--black);padding:60px 5%;text-align:center}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(40px,6vw,80px);color:var(--white);letter-spacing:5px}
+.page-hero h1 span{color:var(--gold)}
+.page-hero p{color:var(--gray);font-size:14px;margin-top:10px;letter-spacing:2px}
+
+/* PAGINATION */
+.pagination{display:flex;gap:8px;justify-content:center;margin-top:40px}
+.page-link{width:38px;height:38px;border:2px solid var(--white-3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gray);transition:var(--transition)}
+.page-link:hover,.page-link.active{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,0.1)}
+
+/* RATING STARS */
+.stars{display:flex;gap:2px;color:var(--gold)}
+.stars i{font-size:13px}
+.stars i.empty{color:var(--white-3)}
+
+/* UTILITIES */
+.container{max-width:1200px;margin:0 auto;padding:0 5%}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.flex{display:flex}
+.flex-center{display:flex;align-items:center;justify-content:center}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.gap-2{gap:8px}
+.gap-3{gap:16px}
+.mt-1{margin-top:8px}.mt-2{margin-top:16px}.mt-3{margin-top:24px}.mt-4{margin-top:32px}.mt-5{margin-top:48px}
+.mb-1{margin-bottom:8px}.mb-2{margin-bottom:16px}.mb-3{margin-bottom:24px}.mb-4{margin-bottom:32px}.mb-5{margin-bottom:48px}
+.text-gold{color:var(--gold)}
+.text-gray{color:var(--gray)}
+.text-center{text-align:center}
+.fw-700{font-weight:700}
+.section-pad{padding:80px 5%}
+.section-pad-sm{padding:50px 5%}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:80px 20px}
+.empty-state i{font-size:60px;color:var(--gold);opacity:0.3;margin-bottom:20px}
+.empty-state h3{font-family:var(--font-display);font-size:28px;letter-spacing:2px;color:var(--black);margin-bottom:10px}
+.empty-state p{color:var(--gray);margin-bottom:24px}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .grid-4{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .nav-links,.nav-icons .profile-name{display:none}
+  .hamburger{display:block}
+  .footer-grid{grid-template-columns:1fr}
+  .grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+  .grid-4,.grid-3,.grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-4 .product-card .product-name{font-size:12px}
+}
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  ⚡ FREE DELIVERY ON ORDERS ABOVE ₹999 &nbsp;|&nbsp; 
+  <a href="tel:9048222478">📞 9048222478</a> &nbsp;|&nbsp; 
+  COD Available Across India
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="{% url 'home' %}" class="nav-brand">
+    <div class="nav-logo">PF</div>
+    <div class="nav-brand-text">
+      <span class="brand-main">PRIME FIT</span>
+      <span class="brand-sub">Apparels</span>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="{% url 'home' %}">Home</a>
+    <div class="dropdown">
+      <a href="{% url 'product_list' %}">Shop <i class="fas fa-chevron-down" style="font-size:9px"></i></a>
+      <div class="dropdown-menu">
+        <a href="{% url 'product_list' %}?gender=men">Men</a>
+        <a href="{% url 'product_list' %}?gender=women">Women</a>
+        <a href="{% url 'product_list' %}?gender=unisex">Unisex</a>
+        <a href="{% url 'product_list' %}?gender=kids">Kids</a>
+        {% for cat in nav_categories %}
+        <a href="{% url 'product_list' %}?category={{ cat.slug }}">{{ cat.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <a href="{% url 'about' %}">About</a>
+    <a href="{% url 'contact' %}">Contact</a>
+  </div>
+
+  <div class="nav-icons">
+    {% if user.is_authenticated %}
+    <a href="{% url 'profile' %}" class="nav-icon-btn" title="Profile">
+      <i class="fas fa-user"></i>
+    </a>
+    <a href="{% url 'wishlist' %}" class="nav-icon-btn" title="Wishlist">
+      <i class="fas fa-heart"></i>
+    </a>
+    {% else %}
+    <a href="{% url 'login' %}" class="nav-icon-btn" title="Login">
+      <i class="fas fa-user"></i>
+    </a>
+    {% endif %}
+    <a href="{% url 'cart' %}" class="nav-icon-btn" title="Cart">
+      <i class="fas fa-shopping-bag"></i>
+      {% if cart_count > 0 %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
+    </a>
+  </div>
+
+  <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px">
+    <span style="font-family:var(--font-display);font-size:20px;color:var(--gold);letter-spacing:3px">PRIME FIT</span>
+    <i class="fas fa-times" style="color:var(--white);cursor:pointer;font-size:18px" onclick="toggleMenu()"></i>
+  </div>
+  <a href="{% url 'home' %}">Home</a>
+  <a href="{% url 'product_list' %}">All Products</a>
+  <a href="{% url 'product_list' %}?gender=men">Men</a>
+  <a href="{% url 'product_list' %}?gender=women">Women</a>
+  <a href="{% url 'product_list' %}?gender=unisex">Unisex</a>
+  {% for cat in nav_categories %}
+  <a href="{% url 'product_list' %}?category={{ cat.slug }}">{{ cat.name }}</a>
+  {% endfor %}
+  <a href="{% url 'about' %}">About Us</a>
+  <a href="{% url 'contact' %}">Contact</a>
+  <a href="{% url 'cart' %}">Cart {% if cart_count > 0 %}({{ cart_count }}){% endif %}</a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'profile' %}">My Profile</a>
+  <a href="{% url 'my_orders' %}">My Orders</a>
+  <a href="{% url 'wishlist' %}">Wishlist</a>
+  <a href="{% url 'logout' %}">Logout</a>
+  {% else %}
+  <a href="{% url 'login' %}">Login</a>
+  <a href="{% url 'register' %}">Register</a>
+  {% endif %}
+</div>
+
+<!-- MESSAGES -->
+{% if messages %}
+<div class="messages-container" id="messagesContainer">
+  {% for message in messages %}
+  <div class="msg msg-{{ message.tags|default:'info' }}">
+    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-times-circle{% else %}fa-info-circle{% endif %}"></i>
+    {{ message }}
+    <span class="msg-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="brand-main">PRIME FIT</span>
+      <span class="brand-sub">Apparels</span>
+      <p>Your ultimate destination for premium sports and fitness apparel. Built for performance, designed for champions.</p>
+      <div class="footer-address">
+        <div><i class="fas fa-map-marker-alt"></i>Medi Tower, Angadikadavu Road,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Near Municipal Market, Angamaly,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ernakulam – 683572</div>
+        <div style="margin-top:8px"><i class="fas fa-phone"></i><a href="tel:9048222478" style="color:var(--gold)">9048222478</a> / <a href="tel:9048222479" style="color:var(--gold)">9048222479</a></div>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Quick Links</div>
+      <div class="footer-links">
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Home</a>
+        <a href="{% url 'product_list' %}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Shop</a>
+        <a href="{% url 'about' %}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>About Us</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Contact</a>
+        <a href="{% url 'cart' %}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Cart</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Categories</div>
+      <div class="footer-links">
+        <a href="{% url 'product_list' %}?gender=men"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Men's Sports</a>
+        <a href="{% url 'product_list' %}?gender=women"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Women's Sports</a>
+        <a href="{% url 'product_list' %}?gender=unisex"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Unisex</a>
+        <a href="{% url 'product_list' %}?gender=kids"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>Kids</a>
+        {% for cat in nav_categories %}
+        <a href="{% url 'product_list' %}?category={{ cat.slug }}"><i class="fas fa-chevron-right text-gold" style="font-size:10px"></i>{{ cat.name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Store Info</div>
+      <div style="font-size:12px;color:var(--gray);line-height:2">
+        <div style="margin-bottom:12px"><i class="fas fa-clock" style="color:var(--gold);margin-right:8px"></i><strong style="color:var(--white-3)">Mon – Sat:</strong> 9:00 AM – 8:00 PM</div>
+        <div style="margin-bottom:12px"><i class="fas fa-clock" style="color:var(--gold);margin-right:8px"></i><strong style="color:var(--white-3)">Sunday:</strong> 10:00 AM – 6:00 PM</div>
+        <div style="margin-bottom:12px"><i class="fas fa-shield-alt" style="color:var(--gold);margin-right:8px"></i>100% Authentic Products</div>
+        <div style="margin-bottom:12px"><i class="fas fa-undo" style="color:var(--gold);margin-right:8px"></i>7-Day Easy Returns</div>
+        <div style="margin-bottom:12px"><i class="fas fa-truck" style="color:var(--gold);margin-right:8px"></i>Free Delivery ₹999+</div>
+        <div><i class="fas fa-lock" style="color:var(--gold);margin-right:8px"></i>Secure Payments</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 <span class="gold">PRIME FIT Apparels</span>. All rights reserved. Angamaly, Ernakulam.</p>
+    <p style="font-size:11px">Designed with <i class="fas fa-heart" style="color:#ef4444"></i> for Champions</p>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+// Auto dismiss messages
+setTimeout(()=>{
+  const msgs = document.getElementById('messagesContainer');
+  if(msgs) msgs.style.opacity = '0', setTimeout(()=>msgs.remove(), 300);
+}, 5000);
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

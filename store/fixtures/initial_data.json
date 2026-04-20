@@ -1,0 +1,241 @@
+[
+  {
+    "model": "store.category",
+    "pk": 1,
+    "fields": {
+      "name": "T-Shirts",
+      "slug": "t-shirts",
+      "description": "Performance sports T-shirts for all activities",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 2,
+    "fields": {
+      "name": "Track Pants",
+      "slug": "track-pants",
+      "description": "Comfortable track pants and joggers",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 3,
+    "fields": {
+      "name": "Shorts",
+      "slug": "shorts",
+      "description": "Sports shorts for gym and outdoor",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 4,
+    "fields": {
+      "name": "Hoodies & Jackets",
+      "slug": "hoodies-jackets",
+      "description": "Warm up and cool down in style",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 5,
+    "fields": {
+      "name": "Sports Bras & Tops",
+      "slug": "sports-bras-tops",
+      "description": "Women's activewear tops and sports bras",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 6,
+    "fields": {
+      "name": "Leggings",
+      "slug": "leggings",
+      "description": "High-performance leggings for women",
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "ProDry Performance T-Shirt",
+      "slug": "prodry-performance-t-shirt",
+      "description": "Ultra-lightweight moisture-wicking T-shirt designed for high-intensity training. Quick-dry fabric keeps you cool and comfortable throughout your workout.",
+      "price": "799.00",
+      "sale_price": "599.00",
+      "gender": "men",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 50,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 2,
+    "fields": {
+      "category": 2,
+      "name": "FlexFit Track Pants",
+      "slug": "flexfit-track-pants",
+      "description": "Slim-fit track pants with elastic waistband and zippered pockets. Perfect for gym sessions, jogging, and casual wear.",
+      "price": "1299.00",
+      "sale_price": null,
+      "gender": "men",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 30,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "created_at": "2024-01-15T00:00:00Z",
+      "updated_at": "2024-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 3,
+    "fields": {
+      "category": 3,
+      "name": "ActiveCore Training Shorts",
+      "slug": "activecore-training-shorts",
+      "description": "4-way stretch shorts with built-in brief and side zip pocket. Ideal for running, HIIT, and gym workouts.",
+      "price": "899.00",
+      "sale_price": "699.00",
+      "gender": "men",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 45,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": false,
+      "created_at": "2024-01-10T00:00:00Z",
+      "updated_at": "2024-01-10T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 4,
+    "fields": {
+      "category": 4,
+      "name": "StretchFit Zip Hoodie",
+      "slug": "stretchfit-zip-hoodie",
+      "description": "Premium full-zip hoodie with kangaroo pocket. Soft fleece lining for warmth without bulk. Perfect for pre and post workout.",
+      "price": "1999.00",
+      "sale_price": "1599.00",
+      "gender": "unisex",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 25,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "created_at": "2024-02-01T00:00:00Z",
+      "updated_at": "2024-02-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 5,
+    "fields": {
+      "category": 5,
+      "name": "PowerHold Sports Bra",
+      "slug": "powerhold-sports-bra",
+      "description": "Medium-support sports bra with moisture-wicking fabric and removable pads. Comfortable for yoga, pilates, and light cardio.",
+      "price": "799.00",
+      "sale_price": null,
+      "gender": "women",
+      "available_sizes": "XS,S,M,L,XL",
+      "stock": 40,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "created_at": "2024-02-05T00:00:00Z",
+      "updated_at": "2024-02-05T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 6,
+    "fields": {
+      "category": 6,
+      "name": "UltraStretch High-Waist Leggings",
+      "slug": "ultrastretch-high-waist-leggings",
+      "description": "High-waisted compression leggings with 4-way stretch. Squat-proof fabric with side pockets. Perfect for gym, yoga, and running.",
+      "price": "1499.00",
+      "sale_price": "1199.00",
+      "gender": "women",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 35,
+      "is_active": true,
+      "is_featured": true,
+      "is_new_arrival": true,
+      "created_at": "2024-02-10T00:00:00Z",
+      "updated_at": "2024-02-10T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 7,
+    "fields": {
+      "category": 1,
+      "name": "Junior Sport T-Shirt",
+      "slug": "junior-sport-t-shirt",
+      "description": "Lightweight sports T-shirt for young athletes. Breathable fabric perfect for school sports, cricket, and football.",
+      "price": "499.00",
+      "sale_price": "399.00",
+      "gender": "kids",
+      "available_sizes": "XS,S,M,L",
+      "stock": 60,
+      "is_active": true,
+      "is_featured": false,
+      "is_new_arrival": true,
+      "created_at": "2024-02-15T00:00:00Z",
+      "updated_at": "2024-02-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 8,
+    "fields": {
+      "category": 2,
+      "name": "Women's Slim Track Pants",
+      "slug": "womens-slim-track-pants",
+      "description": "Slim-fit women's track pants with ankle zip. Soft cotton blend fabric, ideal for everyday training and casual outings.",
+      "price": "1199.00",
+      "sale_price": null,
+      "gender": "women",
+      "available_sizes": "XS,S,M,L,XL,XXL",
+      "stock": 28,
+      "is_active": true,
+      "is_featured": false,
+      "is_new_arrival": false,
+      "created_at": "2024-01-20T00:00:00Z",
+      "updated_at": "2024-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "store.banner",
+    "pk": 1,
+    "fields": {
+      "title": "Train Hard. Look Elite.",
+      "subtitle": "New Season Collection — XS to XXL Available",
+      "button_text": "Shop Now",
+      "button_link": "/products/",
+      "bg_color": "#0a0a0a",
+      "is_active": true,
+      "order": 1
+    }
+  }
+]

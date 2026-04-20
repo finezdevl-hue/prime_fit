@@ -1,0 +1,244 @@
+/* PRIME FIT Custom Admin Theme */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #C9A227;
+  --primary-dark: #A07C15;
+  --bg-dark: #0a0a0a;
+  --bg-mid: #111111;
+  --bg-card: #1a1a1a;
+  --text-white: #ffffff;
+  --text-gray: #888888;
+  --gold-glow: 0 0 15px rgba(201,162,39,0.25);
+}
+
+/* Body */
+body, html {
+  font-family: 'Jost', sans-serif !important;
+  background: #f4f4f0 !important;
+}
+
+/* Header */
+#header {
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-mid) 100%) !important;
+  border-bottom: 2px solid var(--primary) !important;
+  padding: 10px 20px !important;
+}
+
+#site-name a {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: 22px !important;
+  letter-spacing: 3px !important;
+  color: var(--primary) !important;
+  text-shadow: 0 0 20px rgba(201,162,39,0.4);
+}
+
+#user-tools {
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.6) !important;
+}
+
+#user-tools a {
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Sidebar */
+#nav-sidebar {
+  background: var(--bg-dark) !important;
+  border-right: 1px solid rgba(201,162,39,0.15) !important;
+}
+
+#nav-sidebar .current-app .app-nav-sidebar-link {
+  color: var(--primary) !important;
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+  background: var(--bg-mid) !important;
+  color: rgba(255,255,255,0.5) !important;
+  border-bottom: 1px solid rgba(201,162,39,0.1) !important;
+  padding: 10px 20px !important;
+  font-size: 12px !important;
+}
+
+div.breadcrumbs a {
+  color: var(--primary) !important;
+}
+
+/* Content area */
+#content {
+  background: #f4f4f0 !important;
+}
+
+/* Module headers (app titles) */
+.module caption, .inline-group h2, .module h2 {
+  background: linear-gradient(90deg, var(--bg-dark), var(--bg-mid)) !important;
+  color: var(--primary) !important;
+  font-family: 'Bebas Neue', sans-serif !important;
+  letter-spacing: 2px !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+  border-bottom: 2px solid var(--primary) !important;
+}
+
+/* Tables */
+#result_list thead th {
+  background: var(--bg-dark) !important;
+  color: var(--primary) !important;
+  font-size: 11px !important;
+  letter-spacing: 1.5px !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid var(--primary) !important;
+  padding: 12px !important;
+}
+
+#result_list tr:hover td {
+  background: rgba(201,162,39,0.04) !important;
+}
+
+/* Submit buttons */
+input[type=submit], .button, .submit-row input, .submit-row a.closelink {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  font-family: 'Jost', sans-serif !important;
+  letter-spacing: 1px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 10px 22px !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+input[type=submit]:hover, .button:hover {
+  background: linear-gradient(135deg, #E8C84A, var(--primary)) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--gold-glow) !important;
+}
+
+/* Delete button */
+.submit-row a.deletelink {
+  background: #ef4444 !important;
+  color: white !important;
+  border-radius: 6px !important;
+  padding: 10px 22px !important;
+  font-weight: 700 !important;
+  border: none !important;
+}
+
+/* Dashboard modules */
+.dashboard #content {
+  padding: 20px !important;
+}
+
+.module {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08) !important;
+  margin-bottom: 20px !important;
+}
+
+/* Links */
+a:link, a:visited {
+  color: var(--primary-dark) !important;
+}
+
+a:hover {
+  color: var(--primary) !important;
+}
+
+/* Dashboard app icons */
+.app-store.module table a {
+  font-weight: 600 !important;
+}
+
+/* Paginator */
+p.paginator {
+  background: var(--bg-dark) !important;
+  color: rgba(255,255,255,0.5) !important;
+  border-top: 1px solid rgba(201,162,39,0.15) !important;
+  padding: 10px 20px !important;
+}
+
+p.paginator a {
+  color: var(--primary) !important;
+}
+
+/* Change list filter */
+#changelist-filter {
+  background: var(--bg-dark) !important;
+  border-left: 1px solid rgba(201,162,39,0.15) !important;
+}
+
+#changelist-filter h2 {
+  background: rgba(201,162,39,0.1) !important;
+  color: var(--primary) !important;
+  border-bottom: 1px solid rgba(201,162,39,0.2) !important;
+  font-family: 'Bebas Neue', sans-serif !important;
+  letter-spacing: 2px !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+}
+
+#changelist-filter h3 {
+  color: rgba(255,255,255,0.6) !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  padding: 10px 14px 4px !important;
+}
+
+#changelist-filter li a {
+  color: rgba(255,255,255,0.6) !important;
+  padding: 4px 14px !important;
+  display: block !important;
+  font-size: 13px !important;
+}
+
+#changelist-filter li.selected a {
+  color: var(--primary) !important;
+  background: rgba(201,162,39,0.1) !important;
+  border-left: 3px solid var(--primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Search bar */
+#searchbar {
+  border: 2px solid rgba(201,162,39,0.3) !important;
+  border-radius: 8px 0 0 8px !important;
+  padding: 8px 14px !important;
+  font-family: 'Jost', sans-serif !important;
+}
+
+#searchbar:focus {
+  border-color: var(--primary) !important;
+  outline: none !important;
+}
+
+/* Inline groups */
+.inline-group {
+  background: white !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Success / warning messages */
+ul.messagelist li {
+  border-radius: 8px !important;
+  font-family: 'Jost', sans-serif !important;
+  font-size: 13px !important;
+}
+
+ul.messagelist li.success {
+  background: #10b98122 !important;
+  color: #065f46 !important;
+  border-left: 4px solid #10b981 !important;
+}
+
+ul.messagelist li.error {
+  background: #ef444422 !important;
+  color: #7f1d1d !important;
+  border-left: 4px solid #ef4444 !important;
+}

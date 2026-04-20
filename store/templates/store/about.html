@@ -1,0 +1,74 @@
+{% extends 'store/base.html' %}
+{% block title %}About Us – PRIME FIT Apparels{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <h1>ABOUT <span style="color:var(--gold)">US</span></h1>
+  <p>Our Story · Our Mission · Our People</p>
+</div>
+<div class="breadcrumb"><a href="{% url 'home' %}">Home</a><span>›</span>About Us</div>
+
+<section style="padding:80px 5%;background:var(--white)">
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+    <div>
+      <span style="font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;font-weight:700">Our Story</span>
+      <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,56px);letter-spacing:3px;color:var(--black);margin:12px 0 20px;line-height:1">BUILT FOR CHAMPIONS</h2>
+      <div style="width:50px;height:3px;background:var(--gold);margin-bottom:24px;border-radius:2px"></div>
+      <p style="color:var(--gray);font-size:14px;line-height:2;margin-bottom:16px">PRIME FIT Apparels was born from a passion for sports and a vision to make premium performance wear accessible to every athlete — from the amateur gym-goer to the competitive sportsperson.</p>
+      <p style="color:var(--gray);font-size:14px;line-height:2;margin-bottom:24px">Located in the heart of Angamaly, Ernakulam, we are proud to serve athletes and fitness enthusiasts across Kerala and beyond. Every piece in our collection is handpicked for quality, durability and performance.</p>
+      <div style="display:flex;gap:30px">
+        <div><div style="font-family:var(--font-display);font-size:40px;color:var(--gold);letter-spacing:2px">500+</div><div style="font-size:11px;color:var(--gray);letter-spacing:2px">Products</div></div>
+        <div><div style="font-family:var(--font-display);font-size:40px;color:var(--gold);letter-spacing:2px">5K+</div><div style="font-size:11px;color:var(--gray);letter-spacing:2px">Happy Customers</div></div>
+        <div><div style="font-family:var(--font-display);font-size:40px;color:var(--gold);letter-spacing:2px">XS–XXL</div><div style="font-size:11px;color:var(--gray);letter-spacing:2px">All Sizes</div></div>
+      </div>
+    </div>
+    <div style="background:var(--black);border-radius:20px;padding:40px;text-align:center">
+      <div style="font-family:var(--font-display);font-size:100px;color:var(--gold);opacity:0.15;line-height:1">PF</div>
+      <div style="font-family:var(--font-display);font-size:24px;color:var(--gold);letter-spacing:4px;margin-top:-30px">PRIME FIT</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-top:6px">APPARELS</div>
+      <div style="margin-top:24px;font-size:12px;color:rgba(255,255,255,0.4);line-height:2">
+        Medi Tower, Angadikadavu Road<br>
+        Near Municipal Market, Angamaly<br>
+        Ernakulam – 683572<br><br>
+        <a href="tel:9048222478" style="color:var(--gold)">9048222478</a> · <a href="tel:9048222479" style="color:var(--gold)">9048222479</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:80px 5%;background:var(--black)">
+  <div style="text-align:center;margin-bottom:50px">
+    <span style="font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;font-weight:700;display:block;margin-bottom:12px">What We Stand For</span>
+    <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,56px);color:var(--white);letter-spacing:3px">OUR VALUES</h2>
+    <div style="width:50px;height:3px;background:var(--gold);margin:16px auto;border-radius:2px"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;margin:0 auto">
+    {% for v in "123" %}
+    <div style="border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:32px;text-align:center;transition:all 0.3s">
+      {% if forloop.counter == 1 %}
+      <div style="font-size:36px;margin-bottom:16px">⚡</div>
+      <div style="font-family:var(--font-display);font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:10px">PERFORMANCE</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8">Every product is tested for athletic performance. We only sell what works.</div>
+      {% elif forloop.counter == 2 %}
+      <div style="font-size:36px;margin-bottom:16px">🏆</div>
+      <div style="font-family:var(--font-display);font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:10px">QUALITY</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8">100% authentic products from trusted brands and manufacturers.</div>
+      {% else %}
+      <div style="font-size:36px;margin-bottom:16px">❤️</div>
+      <div style="font-family:var(--font-display);font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:10px">COMMUNITY</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8">We believe in building a community of champions right here in Angamaly.</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section style="padding:80px 5%;background:var(--white-2);text-align:center">
+  <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,56px);color:var(--black);letter-spacing:3px;margin-bottom:16px">VISIT OUR STORE</h2>
+  <p style="color:var(--gray);font-size:14px;margin-bottom:32px">Come experience the full collection in person. Our team is ready to help you find the perfect fit!</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+    <a href="{% url 'contact' %}" class="btn btn-gold btn-lg"><i class="fas fa-map-marker-alt"></i> Get Directions</a>
+    <a href="tel:9048222478" class="btn btn-outline-gold btn-lg"><i class="fas fa-phone"></i> Call 9048222478</a>
+    <a href="{% url 'product_list' %}" class="btn btn-black btn-lg"><i class="fas fa-tshirt"></i> Shop Online</a>
+  </div>
+</section>
+{% endblock %}

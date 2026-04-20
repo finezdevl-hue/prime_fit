@@ -1,0 +1,288 @@
+{% extends 'store/base.html' %}
+{% block title %}{{ product.name }} – PRIME FIT Apparels{% endblock %}
+{% block extra_css %}
+<style>
+.product-detail{padding:40px 5%}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.detail-images{position:sticky;top:90px}
+.main-img{border-radius:16px;overflow:hidden;background:var(--white-2);aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.main-img img{width:100%;height:100%;object-fit:cover}
+.main-img-placeholder{font-family:var(--font-display);font-size:80px;color:var(--gold);opacity:0.2}
+.thumb-grid{display:flex;gap:10px}
+.thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:var(--transition)}
+.thumb:hover,.thumb.active{border-color:var(--gold)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.detail-info{}
+.detail-category{font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.detail-name{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);letter-spacing:2px;color:var(--black);line-height:1.1;margin-bottom:16px}
+.detail-rating{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.detail-price{display:flex;align-items:baseline;gap:12px;margin-bottom:24px}
+.detail-price .current{font-size:36px;font-weight:700;color:var(--black)}
+.detail-price .original{font-size:20px;color:var(--gray);text-decoration:line-through}
+.detail-price .discount{font-size:14px;background:rgba(201,162,39,0.15);color:var(--gold-dark);padding:4px 12px;border-radius:20px;font-weight:700}
+.size-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--black);margin-bottom:10px}
+.size-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.size-option{padding:10px 18px;border:2px solid var(--white-3);border-radius:8px;font-size:12px;font-weight:700;color:var(--gray);cursor:pointer;transition:var(--transition)}
+.size-option:hover{border-color:var(--gold-dark);color:var(--gold-dark)}
+.size-option.selected{border-color:var(--gold);background:rgba(201,162,39,0.1);color:var(--gold-dark)}
+.qty-selector{display:flex;align-items:center;gap:0;border:2px solid var(--white-3);border-radius:8px;width:fit-content;margin-bottom:24px;overflow:hidden}
+.qty-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--black);transition:var(--transition);background:none;border:none}
+.qty-btn:hover{background:rgba(201,162,39,0.1);color:var(--gold)}
+.qty-input{width:60px;height:44px;text-align:center;border:none;border-left:2px solid var(--white-3);border-right:2px solid var(--white-3);font-size:16px;font-weight:700;font-family:var(--font-body);outline:none}
+.detail-actions{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.detail-actions .btn{flex:1;min-width:160px}
+.detail-meta{display:flex;flex-direction:column;gap:12px;padding:20px;background:var(--white-2);border-radius:12px;margin-bottom:24px}
+.detail-meta-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--gray)}
+.detail-meta-row i{color:var(--gold);width:16px}
+.detail-meta-row strong{color:var(--black)}
+.tabs{margin-top:50px}
+.tab-nav{display:flex;border-bottom:2px solid var(--white-3);margin-bottom:24px}
+.tab-btn{padding:12px 24px;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--transition);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-body)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.review-card{padding:20px;border:1px solid var(--white-3);border-radius:12px;margin-bottom:16px}
+.review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.review-user{font-weight:600;font-size:13px}
+.review-date{font-size:11px;color:var(--gray)}
+.review-text{font-size:13px;color:var(--gray);line-height:1.8}
+.review-form{background:var(--white-2);border-radius:12px;padding:24px;margin-top:24px}
+.star-rating{display:flex;gap:4px;font-size:28px;cursor:pointer;margin-bottom:12px}
+.star-rating i{color:var(--white-3);transition:var(--transition)}
+.star-rating i:hover,.star-rating i.active{color:var(--gold)}
+.related-section{padding:60px 5%;background:var(--white-2)}
+@media(max-width:768px){
+  .detail-grid{grid-template-columns:1fr}
+  .detail-images{position:static}
+  .detail-actions{flex-direction:column}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+  <a href="{% url 'home' %}">Home</a><span>›</span>
+  <a href="{% url 'product_list' %}">Shop</a><span>›</span>
+  <a href="{% url 'product_list' %}?category={{ product.category.slug }}">{{ product.category.name }}</a><span>›</span>
+  {{ product.name }}
+</div>
+
+<div class="product-detail">
+  <div class="detail-grid">
+    <!-- IMAGES -->
+    <div class="detail-images">
+      <div class="main-img" id="mainImg">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainImgEl">
+        {% else %}
+        <div class="main-img-placeholder">PF</div>
+        {% endif %}
+      </div>
+      {% if product.image or product.image2 or product.image3 %}
+      <div class="thumb-grid">
+        {% if product.image %}<div class="thumb active" onclick="switchImg('{{ product.image.url }}',this)"><img src="{{ product.image.url }}" alt=""></div>{% endif %}
+        {% if product.image2 %}<div class="thumb" onclick="switchImg('{{ product.image2.url }}',this)"><img src="{{ product.image2.url }}" alt=""></div>{% endif %}
+        {% if product.image3 %}<div class="thumb" onclick="switchImg('{{ product.image3.url }}',this)"><img src="{{ product.image3.url }}" alt=""></div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- INFO -->
+    <div class="detail-info">
+      <div class="detail-category">{{ product.category.name }} · {{ product.get_gender_display }}</div>
+      <h1 class="detail-name">{{ product.name }}</h1>
+
+      <div class="detail-rating">
+        <div class="stars">
+          {% for i in "12345" %}
+          <i class="fas fa-star {% if forloop.counter > avg_rating %}empty{% endif %}"></i>
+          {% endfor %}
+        </div>
+        <span style="font-size:13px;color:var(--gray)">{{ avg_rating }}/5 ({{ review_count }} reviews)</span>
+      </div>
+
+      <div class="detail-price">
+        <span class="current">₹{{ product.get_display_price }}</span>
+        {% if product.sale_price %}
+        <span class="original">₹{{ product.price }}</span>
+        <span class="discount">{{ product.get_discount_percent }}% OFF</span>
+        {% endif %}
+      </div>
+
+      <form action="{% url 'add_to_cart' product.id %}" method="post" id="addToCartForm">
+        {% csrf_token %}
+
+        <div class="size-label">Select Size</div>
+        <div class="size-selector">
+          {% for size in sizes %}
+          <label>
+            <input type="radio" name="size" value="{{ size }}" style="display:none" {% if forloop.first %}checked{% endif %}>
+            <div class="size-option {% if forloop.first %}selected{% endif %}" onclick="selectSize(this,'{{ size }}')">{{ size }}</div>
+          </label>
+          {% endfor %}
+        </div>
+
+        <div class="size-label">Quantity</div>
+        <div class="qty-selector">
+          <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+          <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="qty-input" id="qtyInput">
+          <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+
+        <div class="detail-actions">
+          <button type="submit" class="btn btn-gold btn-lg">
+            <i class="fas fa-shopping-bag"></i> Add to Cart
+          </button>
+          {% if user.is_authenticated %}
+          <a href="{% url 'toggle_wishlist' product.id %}" class="btn btn-outline-gold btn-lg {% if in_wishlist %}active{% endif %}">
+            <i class="fas fa-heart"></i> {% if in_wishlist %}Wishlisted{% else %}Wishlist{% endif %}
+          </a>
+          {% else %}
+          <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-black btn-lg">
+            <i class="fas fa-heart"></i> Wishlist
+          </a>
+          {% endif %}
+        </div>
+      </form>
+
+      <div class="detail-meta">
+        <div class="detail-meta-row"><i class="fas fa-box"></i><span>Stock: <strong>{% if product.stock > 0 %}{{ product.stock }} Available{% else %}Out of Stock{% endif %}</strong></span></div>
+        <div class="detail-meta-row"><i class="fas fa-ruler"></i><span>Available Sizes: <strong>{{ product.available_sizes }}</strong></span></div>
+        <div class="detail-meta-row"><i class="fas fa-truck"></i><span>Free delivery on orders above <strong>₹999</strong></span></div>
+        <div class="detail-meta-row"><i class="fas fa-undo"></i><span><strong>7-day</strong> easy returns</span></div>
+        <div class="detail-meta-row"><i class="fas fa-shield-alt"></i><span><strong>100% Authentic</strong> Product</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('desc',this)">Description</button>
+      <button class="tab-btn" onclick="switchTab('reviews',this)">Reviews ({{ review_count }})</button>
+      <button class="tab-btn" onclick="switchTab('shipping',this)">Shipping & Returns</button>
+    </div>
+    <div class="tab-content active" id="tab-desc">
+      <p style="font-size:14px;line-height:2;color:var(--gray);max-width:700px">{{ product.description }}</p>
+    </div>
+    <div class="tab-content" id="tab-reviews">
+      {% for review in reviews %}
+      <div class="review-card">
+        <div class="review-header">
+          <div>
+            <div class="review-user">{{ review.user.get_full_name|default:review.user.username }}</div>
+            <div class="stars" style="font-size:12px">
+              {% for i in "12345" %}<i class="fas fa-star {% if forloop.counter > review.rating %}empty{% endif %}"></i>{% endfor %}
+            </div>
+          </div>
+          <div class="review-date">{{ review.created_at|date:"M d, Y" }}</div>
+        </div>
+        <p class="review-text">{{ review.comment }}</p>
+      </div>
+      {% empty %}
+      <p style="color:var(--gray);font-size:14px">No reviews yet. Be the first to review!</p>
+      {% endfor %}
+
+      {% if user.is_authenticated and not user_review %}
+      <div class="review-form">
+        <h3 style="font-family:var(--font-display);letter-spacing:2px;margin-bottom:16px">Write a Review</h3>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Your Rating</label>
+            <div class="star-rating" id="starRating">
+              <i class="far fa-star" data-val="1"></i>
+              <i class="far fa-star" data-val="2"></i>
+              <i class="far fa-star" data-val="3"></i>
+              <i class="far fa-star" data-val="4"></i>
+              <i class="far fa-star" data-val="5"></i>
+            </div>
+            <input type="hidden" name="rating" id="ratingInput" value="5">
+          </div>
+          <div class="form-group">
+            <label>Your Comment</label>
+            <textarea name="comment" class="form-control" rows="4" required placeholder="Share your experience..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold">Submit Review</button>
+        </form>
+      </div>
+      {% elif not user.is_authenticated %}
+      <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-gold" style="margin-top:16px">Login to Write a Review</a>
+      {% endif %}
+    </div>
+    <div class="tab-content" id="tab-shipping">
+      <div style="font-size:14px;line-height:2;color:var(--gray);max-width:600px">
+        <p><strong style="color:var(--black)">Shipping:</strong> Free delivery on orders above ₹999. Standard delivery 3–7 business days. Express delivery available.</p>
+        <p style="margin-top:12px"><strong style="color:var(--black)">Returns:</strong> 7-day easy return policy. Product must be unused with original tags. Contact us at <a href="tel:9048222478" style="color:var(--gold)">9048222478</a>.</p>
+        <p style="margin-top:12px"><strong style="color:var(--black)">Store Pickup:</strong> Available at PRIME FIT Apparels, Medi Tower, Angadikadavu Road, Angamaly, Ernakulam – 683572.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED -->
+{% if related %}
+<section class="related-section">
+  <div class="section-header">
+    <span class="section-tag">You May Also Like</span>
+    <h2 class="section-title">Related Products</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="products-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+    {% for p in related %}
+    <div class="product-card">
+      <a href="{% url 'product_detail' p.slug %}">
+        <div class="product-card-img">
+          {% if p.image %}<img src="{{ p.image.url }}" alt="{{ p.name }}">{% else %}<div class="product-card-img-placeholder">PF</div>{% endif %}
+          {% if p.sale_price %}<div class="product-badges"><span class="badge badge-sale">-{{ p.get_discount_percent }}%</span></div>{% endif %}
+        </div>
+      </a>
+      <div class="product-card-body">
+        <div class="product-name">{{ p.name }}</div>
+        <div class="product-price"><span class="price-current">₹{{ p.get_display_price }}</span></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<script>
+function switchImg(url, el){
+  document.getElementById('mainImgEl').src = url;
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectSize(el, size){
+  document.querySelectorAll('.size-option').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function changeQty(delta){
+  const inp = document.getElementById('qtyInput');
+  let v = parseInt(inp.value) + delta;
+  inp.value = Math.max(1, v);
+}
+// Star rating
+const stars = document.querySelectorAll('#starRating i');
+stars.forEach((star,i)=>{
+  star.addEventListener('mouseover',()=>{
+    stars.forEach((s,j)=>{
+      s.className = j<=i ? 'fas fa-star active' : 'far fa-star';
+    });
+  });
+  star.addEventListener('click',()=>{
+    document.getElementById('ratingInput').value = i+1;
+  });
+});
+document.getElementById('starRating')?.addEventListener('mouseleave',()=>{
+  const val = parseInt(document.getElementById('ratingInput').value);
+  stars.forEach((s,j)=>s.className = j<val ? 'fas fa-star active' : 'far fa-star');
+});
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+{% endblock %}

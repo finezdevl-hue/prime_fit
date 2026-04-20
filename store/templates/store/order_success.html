@@ -1,0 +1,90 @@
+{% extends 'store/base.html' %}
+{% block title %}Order Placed – PRIME FIT Apparels{% endblock %}
+{% block extra_css %}
+<style>
+.success-page{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:60px 5%;background:var(--white-2)}
+.success-card{background:var(--white);border-radius:24px;padding:50px;max-width:650px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.1)}
+.success-icon{width:90px;height:90px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;color:var(--black);animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-card h1{font-family:var(--font-display);font-size:42px;letter-spacing:3px;color:var(--black);margin-bottom:10px}
+.success-card h1 span{color:var(--gold)}
+.success-card p{color:var(--gray);font-size:14px;line-height:1.8;margin-bottom:8px}
+.order-box{background:var(--black);border-radius:16px;padding:24px;margin:24px 0;text-align:left}
+.order-box .order-num{font-family:var(--font-display);font-size:28px;color:var(--gold);letter-spacing:4px;margin-bottom:16px}
+.order-detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.order-detail-row:last-child{border-bottom:none}
+.order-detail-row .label{color:rgba(255,255,255,0.5)}
+.order-detail-row .value{color:var(--white);font-weight:600}
+.items-list{margin:20px 0;text-align:left}
+.items-list h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:12px}
+.items-list-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--white-3);font-size:13px}
+.items-list-item:last-child{border-bottom:none}
+.items-list-item .item-name{color:var(--black)}
+.items-list-item .item-price{color:var(--gold-dark);font-weight:600}
+.success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.store-info-box{background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.2);border-radius:12px;padding:16px 20px;text-align:left;font-size:12px;color:var(--gray);line-height:2;margin-top:16px}
+.store-info-box i{color:var(--gold);margin-right:6px}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h1>ORDER <span>PLACED!</span></h1>
+    <p>Thank you for shopping with <strong>PRIME FIT Apparels</strong>!</p>
+    <p>Your order has been received and is being processed.</p>
+
+    <div class="order-box">
+      <div class="order-num">#{{ order.order_number }}</div>
+      <div class="order-detail-row">
+        <span class="label">Customer</span>
+        <span class="value">{{ order.full_name }}</span>
+      </div>
+      <div class="order-detail-row">
+        <span class="label">Phone</span>
+        <span class="value">{{ order.phone }}</span>
+      </div>
+      <div class="order-detail-row">
+        <span class="label">Payment</span>
+        <span class="value">{{ order.get_payment_method_display }}</span>
+      </div>
+      <div class="order-detail-row">
+        <span class="label">Status</span>
+        <span class="value" style="color:var(--gold)">{{ order.get_status_display }}</span>
+      </div>
+      <div class="order-detail-row">
+        <span class="label">Deliver To</span>
+        <span class="value">{{ order.city }}, {{ order.state }} – {{ order.pincode }}</span>
+      </div>
+      <div class="order-detail-row">
+        <span class="label">Total Amount</span>
+        <span class="value" style="color:var(--gold);font-size:18px">₹{{ order.total_amount }}</span>
+      </div>
+    </div>
+
+    <div class="items-list">
+      <h4>Items Ordered</h4>
+      {% for item in order.items.all %}
+      <div class="items-list-item">
+        <span class="item-name">{{ item.product_name }} ({{ item.size }}) × {{ item.quantity }}</span>
+        <span class="item-price">₹{{ item.get_subtotal }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="store-info-box">
+      <div><i class="fas fa-store"></i><strong>PRIME FIT Apparels</strong></div>
+      <div><i class="fas fa-map-marker-alt"></i>Medi Tower, Angadikadavu Road, Near Municipal Market, Angamaly, Ernakulam – 683572</div>
+      <div><i class="fas fa-phone"></i><a href="tel:9048222478" style="color:var(--gold)">9048222478</a> / <a href="tel:9048222479" style="color:var(--gold)">9048222479</a></div>
+    </div>
+
+    <div class="success-actions">
+      <a href="{% url 'product_list' %}" class="btn btn-gold btn-lg">Continue Shopping</a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'my_orders' %}" class="btn btn-outline-gold">My Orders</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

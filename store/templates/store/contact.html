@@ -1,0 +1,131 @@
+{% extends 'store/base.html' %}
+{% block title %}Contact Us – PRIME FIT Apparels{% endblock %}
+{% block extra_css %}
+<style>
+.contact-page{padding:60px 5%}
+.contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:50px;align-items:start}
+.contact-form-card{background:var(--white);border-radius:20px;padding:40px;box-shadow:0 4px 30px rgba(0,0,0,0.08)}
+.contact-info-card{background:var(--black);border-radius:20px;padding:40px;color:var(--white)}
+.contact-info-title{font-family:var(--font-display);font-size:28px;color:var(--gold);letter-spacing:3px;margin-bottom:8px}
+.contact-info-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:32px;line-height:1.8}
+.info-item{display:flex;gap:16px;margin-bottom:24px;align-items:flex-start}
+.info-icon{width:44px;height:44px;background:rgba(201,162,39,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;flex-shrink:0;transition:var(--transition)}
+.info-item:hover .info-icon{background:var(--gold);color:var(--black)}
+.info-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px}
+.info-value{font-size:14px;color:var(--white);font-weight:500;line-height:1.6}
+.info-value a{color:var(--gold)}
+.map-embed{border-radius:16px;overflow:hidden;margin-top:24px;height:200px;background:var(--black-3);display:flex;align-items:center;justify-content:center;color:var(--gray);font-size:13px}
+.hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
+.hour-item{background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 14px;font-size:12px}
+.hour-day{color:rgba(255,255,255,0.4);margin-bottom:2px}
+.hour-time{color:var(--gold);font-weight:600}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <h1>CONTACT <span style="color:var(--gold)">US</span></h1>
+  <p>We're here to help · Angamaly, Ernakulam</p>
+</div>
+<div class="breadcrumb"><a href="{% url 'home' %}">Home</a><span>›</span>Contact</div>
+
+<div class="contact-page">
+  <div class="contact-grid">
+    <div class="contact-form-card">
+      <div style="font-family:var(--font-display);font-size:26px;letter-spacing:2px;color:var(--black);margin-bottom:6px">Send a Message</div>
+      <p style="color:var(--gray);font-size:13px;margin-bottom:28px">Fill in the form and we'll get back to you within 24 hours.</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" name="name" class="form-control" required placeholder="Full name">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" name="email" class="form-control" required placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" name="phone" class="form-control" placeholder="Mobile number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Subject *</label>
+          <input type="text" name="subject" class="form-control" required placeholder="How can we help?">
+        </div>
+        <div class="form-group">
+          <label>Message *</label>
+          <textarea name="message" class="form-control" rows="5" required placeholder="Write your message here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+
+    <div>
+      <div class="contact-info-card">
+        <div class="contact-info-title">PRIME FIT</div>
+        <div class="contact-info-sub">Your trusted sports apparel partner in Angamaly. Visit us in store or reach out online!</div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="info-label">Store Address</div>
+            <div class="info-value">
+              PRIME FIT Apparels<br>
+              Medi Tower, Angadikadavu Road<br>
+              Near Municipal Market, Angamaly<br>
+              Ernakulam – 683572, Kerala
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="info-label">Phone Numbers</div>
+            <div class="info-value">
+              <a href="tel:9048222478">+91 90482 22478</a><br>
+              <a href="tel:9048222479">+91 90482 22479</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fab fa-whatsapp"></i></div>
+          <div>
+            <div class="info-label">WhatsApp</div>
+            <div class="info-value">
+              <a href="https://wa.me/919048222478" target="_blank">Chat on WhatsApp</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="info-label">Store Hours</div>
+            <div class="hours-grid">
+              <div class="hour-item"><div class="hour-day">Mon – Sat</div><div class="hour-time">9AM – 8PM</div></div>
+              <div class="hour-item"><div class="hour-day">Sunday</div><div class="hour-time">10AM – 6PM</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;background:var(--white-2);border-radius:16px;padding:24px">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:12px">Quick Links</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="{% url 'product_list' %}?gender=men" class="btn btn-black btn-sm">Men's Wear</a>
+          <a href="{% url 'product_list' %}?gender=women" class="btn btn-black btn-sm">Women's Wear</a>
+          <a href="{% url 'product_list' %}" class="btn btn-outline-gold btn-sm">All Products</a>
+          <a href="{% url 'about' %}" class="btn btn-black btn-sm">About Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

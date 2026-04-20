@@ -1,0 +1,182 @@
+{% extends 'store/base.html' %}
+{% block title %}Checkout – PRIME FIT Apparels{% endblock %}
+{% block extra_css %}
+<style>
+.checkout-page{padding:40px 5%}
+.checkout-layout{display:grid;grid-template-columns:1fr 380px;gap:30px;align-items:start}
+.checkout-form-section{background:var(--white);border-radius:16px;padding:32px;box-shadow:0 2px 20px rgba(0,0,0,0.06)}
+.checkout-section-title{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--black);margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:10px}
+.checkout-section-title i{color:var(--gold);font-size:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.payment-options{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.payment-option{display:flex;align-items:center;gap:14px;padding:16px 20px;border:2px solid var(--white-3);border-radius:10px;cursor:pointer;transition:var(--transition)}
+.payment-option:hover{border-color:var(--gold-dark)}
+.payment-option input[type=radio]{accent-color:var(--gold);width:18px;height:18px}
+.payment-option label{cursor:pointer;font-size:14px;font-weight:500;flex:1;display:flex;align-items:center;gap:10px}
+.payment-option:has(input:checked){border-color:var(--gold);background:rgba(201,162,39,0.05)}
+.payment-icon{font-size:20px}
+.order-summary-panel{background:var(--black);border-radius:16px;padding:28px;position:sticky;top:90px}
+.order-items{max-height:300px;overflow-y:auto;margin-bottom:20px}
+.order-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07)}
+.order-item:last-child{border-bottom:none}
+.order-item-img{width:50px;height:50px;border-radius:8px;overflow:hidden;background:var(--black-3);flex-shrink:0}
+.order-item-img img{width:100%;height:100%;object-fit:cover}
+.order-item-name{font-size:12px;font-weight:600;color:var(--white);flex:1}
+.order-item-size{font-size:10px;color:var(--gray)}
+.order-item-price{font-size:13px;font-weight:700;color:var(--gold)}
+.summary-row{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:10px}
+.summary-row strong{color:var(--white)}
+.summary-total-row{display:flex;justify-content:space-between;font-size:18px;font-weight:700;color:var(--white);padding-top:14px;border-top:1px solid rgba(255,255,255,0.1)}
+.summary-total-row .gold{color:var(--gold);font-size:22px}
+@media(max-width:768px){
+  .checkout-layout{grid-template-columns:1fr}
+  .order-summary-panel{position:static}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-hero" style="padding:40px 5%">
+  <h1>CHECK<span style="color:var(--gold)">OUT</span></h1>
+  <p>Complete your order securely</p>
+</div>
+<div class="breadcrumb">
+  <a href="{% url 'home' %}">Home</a><span>›</span>
+  <a href="{% url 'cart' %}">Cart</a><span>›</span>Checkout
+</div>
+
+<div class="checkout-page">
+  <form method="post" id="checkoutForm">
+    {% csrf_token %}
+    <div class="checkout-layout">
+
+      <!-- LEFT: FORM -->
+      <div>
+        <!-- CONTACT INFO -->
+        <div class="checkout-form-section" style="margin-bottom:20px">
+          <div class="checkout-section-title"><i class="fas fa-user"></i> Contact Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="full_name" class="form-control" required
+                     value="{{ user_data.full_name|default:'' }}" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" name="phone" class="form-control" required placeholder="10-digit mobile number">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" class="form-control" required
+                   value="{{ user_data.email|default:'' }}" placeholder="your@email.com">
+          </div>
+        </div>
+
+        <!-- SHIPPING ADDRESS -->
+        <div class="checkout-form-section" style="margin-bottom:20px">
+          <div class="checkout-section-title"><i class="fas fa-map-marker-alt"></i> Shipping Address</div>
+          <div class="form-group">
+            <label>Street Address *</label>
+            <input type="text" name="address" class="form-control" required placeholder="House No, Street, Area">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City *</label>
+              <input type="text" name="city" class="form-control" required placeholder="City">
+            </div>
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" name="state" class="form-control" required placeholder="State" value="Kerala">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>PIN Code *</label>
+              <input type="text" name="pincode" class="form-control" required placeholder="6-digit PIN" maxlength="6">
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="checkout-form-section">
+          <div class="checkout-section-title"><i class="fas fa-credit-card"></i> Payment Method</div>
+          <div class="payment-options">
+            <div class="payment-option">
+              <input type="radio" name="payment_method" value="cod" id="pay_cod" checked>
+              <label for="pay_cod"><span class="payment-icon">💵</span> Cash on Delivery (COD)</label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" name="payment_method" value="upi" id="pay_upi">
+              <label for="pay_upi"><span class="payment-icon">📱</span> UPI Payment</label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" name="payment_method" value="card" id="pay_card">
+              <label for="pay_card"><span class="payment-icon">💳</span> Credit / Debit Card</label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" name="payment_method" value="netbanking" id="pay_nb">
+              <label for="pay_nb"><span class="payment-icon">🏦</span> Net Banking</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Order Notes (Optional)</label>
+            <textarea name="notes" class="form-control" rows="3" placeholder="Any special instructions..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: ORDER SUMMARY -->
+      <div class="order-summary-panel">
+        <div style="font-family:var(--font-display);font-size:22px;color:var(--gold);letter-spacing:3px;margin-bottom:20px">Order Summary</div>
+        <div class="order-items">
+          {% for item in items %}
+          <div class="order-item">
+            <div class="order-item-img">
+              {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+              {% else %}
+              <div style="width:100%;height:100%;background:var(--black-3);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold);font-family:var(--font-display)">PF</div>
+              {% endif %}
+            </div>
+            <div style="flex:1">
+              <div class="order-item-name">{{ item.product.name }}</div>
+              <div class="order-item-size">Size: {{ item.size }} × {{ item.quantity }}</div>
+            </div>
+            <div class="order-item-price">₹{{ item.get_subtotal }}</div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong>₹{{ cart.get_total }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <strong style="color:#10b981">{% if cart.get_total >= 999 %}FREE{% else %}₹50{% endif %}</strong>
+        </div>
+        <div class="summary-total-row">
+          <span>Total</span>
+          <span class="gold">₹{% if cart.get_total >= 999 %}{{ cart.get_total }}{% else %}{{ cart.get_total|add:50 }}{% endif %}</span>
+        </div>
+
+        <div style="font-size:11px;color:rgba(255,255,255,0.35);margin:16px 0;line-height:1.9">
+          ✓ Secure checkout<br>
+          ✓ Free delivery on orders ₹999+<br>
+          ✓ 7-day return policy<br>
+          ✓ 100% authentic products
+        </div>
+
+        <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center">
+          <i class="fas fa-lock"></i> Place Order
+        </button>
+        <a href="{% url 'cart' %}" style="display:block;text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,0.4)">
+          <i class="fas fa-arrow-left"></i> Back to Cart
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

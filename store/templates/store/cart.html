@@ -1,0 +1,140 @@
+{% extends 'store/base.html' %}
+{% block title %}Cart – PRIME FIT Apparels{% endblock %}
+{% block extra_css %}
+<style>
+.cart-page{padding:40px 5%}
+.cart-layout{display:grid;grid-template-columns:1fr 340px;gap:30px;align-items:start}
+.cart-table{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 20px rgba(0,0,0,0.06)}
+.cart-table-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:16px;padding:16px 24px;background:var(--black);color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.cart-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:16px;padding:20px 24px;align-items:center;border-bottom:1px solid var(--white-3)}
+.cart-row:last-child{border-bottom:none}
+.cart-product{display:flex;align-items:center;gap:16px}
+.cart-img{width:70px;height:70px;border-radius:10px;overflow:hidden;background:var(--white-2);flex-shrink:0}
+.cart-img img{width:100%;height:100%;object-fit:cover}
+.cart-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;color:var(--gold);opacity:0.4}
+.cart-item-name{font-weight:600;font-size:14px;color:var(--black);margin-bottom:4px}
+.cart-item-size{font-size:11px;color:var(--gray);letter-spacing:1px}
+.cart-price{font-weight:600;color:var(--black)}
+.cart-qty{display:flex;align-items:center;gap:0;border:2px solid var(--white-3);border-radius:8px;overflow:hidden;width:fit-content}
+.qty-ctrl{width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;background:none;border:none;transition:var(--transition)}
+.qty-ctrl:hover{background:rgba(201,162,39,0.1);color:var(--gold)}
+.qty-display{width:40px;text-align:center;font-size:14px;font-weight:700;border-left:2px solid var(--white-3);border-right:2px solid var(--white-3);padding:8px 0}
+.cart-subtotal{font-weight:700;color:var(--gold-dark)}
+.remove-btn{width:32px;height:32px;border-radius:50%;border:none;background:rgba(239,68,68,0.1);color:#ef4444;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.remove-btn:hover{background:#ef4444;color:white}
+.cart-summary{background:var(--black);border-radius:16px;padding:28px;position:sticky;top:90px}
+.summary-title{font-family:var(--font-display);font-size:24px;color:var(--gold);letter-spacing:3px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.summary-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:13px;color:rgba(255,255,255,0.7)}
+.summary-row strong{color:var(--white)}
+.summary-divider{border-color:rgba(255,255,255,0.1);margin:16px 0}
+.summary-total{display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:700;color:var(--white)}
+.summary-total .amount{color:var(--gold);font-size:22px}
+.summary-notes{font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;line-height:1.8}
+@media(max-width:768px){
+  .cart-layout{grid-template-columns:1fr}
+  .cart-table-header{display:none}
+  .cart-row{grid-template-columns:1fr;gap:10px}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-hero" style="padding:40px 5%">
+  <h1>MY <span style="color:var(--gold)">CART</span></h1>
+  <p>{{ cart.get_count }} item{{ cart.get_count|pluralize }} in your cart</p>
+</div>
+<div class="breadcrumb"><a href="{% url 'home' %}">Home</a><span>›</span>Cart</div>
+
+<div class="cart-page">
+  {% if items %}
+  <div class="cart-layout">
+    <div>
+      <div class="cart-table">
+        <div class="cart-table-header">
+          <span>Product</span><span>Price</span><span>Quantity</span><span>Subtotal</span><span></span>
+        </div>
+        {% for item in items %}
+        <div class="cart-row">
+          <div class="cart-product">
+            <div class="cart-img">
+              {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+              {% else %}
+              <div class="cart-img-placeholder">PF</div>
+              {% endif %}
+            </div>
+            <div>
+              <div class="cart-item-name">{{ item.product.name }}</div>
+              <div class="cart-item-size">Size: {{ item.size }}</div>
+            </div>
+          </div>
+          <div class="cart-price">₹{{ item.product.get_display_price }}</div>
+          <div class="cart-qty">
+            <form action="{% url 'update_cart' item.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="decrease">
+              <button type="submit" class="qty-ctrl">−</button>
+            </form>
+            <div class="qty-display">{{ item.quantity }}</div>
+            <form action="{% url 'update_cart' item.id %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="increase">
+              <button type="submit" class="qty-ctrl">+</button>
+            </form>
+          </div>
+          <div class="cart-subtotal">₹{{ item.get_subtotal }}</div>
+          <form action="{% url 'update_cart' item.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="remove">
+            <button type="submit" class="remove-btn"><i class="fas fa-trash" style="font-size:12px"></i></button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+        <a href="{% url 'product_list' %}" class="btn btn-black"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-title">Order Summary</div>
+      {% for item in items %}
+      <div class="summary-row">
+        <span>{{ item.product.name }} ({{ item.size }}) × {{ item.quantity }}</span>
+        <strong>₹{{ item.get_subtotal }}</strong>
+      </div>
+      {% endfor %}
+      <hr class="summary-divider">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong>₹{{ cart.get_total }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <strong style="color:#10b981">{% if cart.get_total >= 999 %}FREE{% else %}₹50{% endif %}</strong>
+      </div>
+      <hr class="summary-divider">
+      <div class="summary-total">
+        <span>Total</span>
+        <span class="amount">₹{% if cart.get_total >= 999 %}{{ cart.get_total }}{% else %}{{ cart.get_total|add:50 }}{% endif %}</span>
+      </div>
+      <div class="summary-notes">
+        ✓ Free delivery on orders above ₹999<br>
+        ✓ COD available across India<br>
+        ✓ 7-day easy returns
+      </div>
+      <a href="{% url 'checkout' %}" class="btn btn-gold btn-lg" style="width:100%;margin-top:20px;justify-content:center">
+        <i class="fas fa-lock"></i> Proceed to Checkout
+      </a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="fas fa-shopping-bag"></i>
+    <h3>Your Cart is Empty</h3>
+    <p>Looks like you haven't added any products yet.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-gold btn-lg">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
