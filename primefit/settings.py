@@ -89,7 +89,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'config('CSRF_TRUSTED_ORIGINS', default='localhost,127.0.0.1', cast=Csv())
+LOGOUT_REDIRECT_URL = '/'
+
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='localhost,127.0.0.1', cast=Csv())
 CSRF_TRUSTED_ORIGINS = ['https://' + host if not host.startswith('http') else host for host in CSRF_TRUSTED_ORIGINS]
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -104,6 +107,3 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-SESSION_COOKIE_SECURE = False
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 1209600  # 2 weeks
