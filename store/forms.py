@@ -3,6 +3,18 @@ from .models import Category, Product, SiteSettings
 
 
 class CategoryForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            css_class = 'admin-input'
+            if isinstance(field.widget, forms.Textarea):
+                css_class = 'admin-textarea'
+            elif isinstance(field.widget, forms.Select):
+                css_class = 'admin-select'
+            elif isinstance(field.widget, forms.ClearableFileInput):
+                css_class = 'admin-file'
+            field.widget.attrs['class'] = css_class
+
     class Meta:
         model = Category
         fields = ['name', 'slug', 'description', 'image', 'is_active']
@@ -12,6 +24,18 @@ class CategoryForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            css_class = 'admin-input'
+            if isinstance(field.widget, forms.Textarea):
+                css_class = 'admin-textarea'
+            elif isinstance(field.widget, forms.Select):
+                css_class = 'admin-select'
+            elif isinstance(field.widget, forms.ClearableFileInput):
+                css_class = 'admin-file'
+            field.widget.attrs['class'] = css_class
+
     class Meta:
         model = Product
         fields = [
@@ -26,6 +50,16 @@ class ProductForm(forms.ModelForm):
 
 
 class SiteSettingsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            css_class = 'admin-input'
+            if isinstance(field.widget, forms.Textarea):
+                css_class = 'admin-textarea'
+            elif isinstance(field.widget, forms.ClearableFileInput):
+                css_class = 'admin-file'
+            field.widget.attrs['class'] = css_class
+
     class Meta:
         model = SiteSettings
         fields = [

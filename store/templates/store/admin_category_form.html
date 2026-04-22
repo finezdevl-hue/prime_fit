@@ -1,44 +1,39 @@
-{% extends 'store/base.html' %}
-{% load static %}
+{% extends 'store/admin_base.html' %}
 
-{% block title %}{% if category %}Edit Category{% else %}Add Category{% endif %} – Admin Panel{% endblock %}
+{% block title %}{% if category %}Edit Category{% else %}Add Category{% endif %} | Prime Fit Admin{% endblock %}
+{% block admin_eyebrow %}Category Editor{% endblock %}
+{% block admin_title %}{% if category %}Edit Category{% else %}Add Category{% endif %}{% endblock %}
+{% block admin_intro %}Adjust naming, slugs, visuals, and visibility for the catalog sections customers browse first.{% endblock %}
 
-{% block extra_css %}
-<style>
-.form-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:28px; max-width:700px; margin-top:20px; }
-.form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
-label { color:#0a0a0a; font-size:14px; }
-input, textarea { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; color:#0a0a0a; }
-textarea { min-height:120px; }
-.button-primary, .button-secondary { display:inline-block; padding:12px 22px; border-radius:12px; text-decoration:none; font-weight:700; }
-.button-primary { background:#c9a227; color:#000; }
-.button-secondary { background:#f4f4f4; color:#0a0a0a; }
-</style>
+{% block admin_actions %}
+<a href="{% url 'admin_categories' %}" class="admin-link-btn">Back to Categories</a>
 {% endblock %}
 
-{% block content %}
-<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-  <div>
-    <h1 style="color:#fff;margin-bottom:6px">{% if category %}Edit Category{% else %}Add Category{% endif %}</h1>
-    <p style="color:#aaa;margin:0">Update category details for the storefront.</p>
+{% block admin_content %}
+<section class="admin-card">
+  <div class="admin-section-head">
+    <div>
+      <div class="admin-section-kicker">Category Form</div>
+      <h2 class="admin-section-title">{% if category %}Update {{ category.name }}{% else %}Create a new category{% endif %}</h2>
+    </div>
   </div>
-  <a href="{% url 'admin_categories' %}" class="button-secondary">Back to Categories</a>
-</div>
-
-<div class="form-card">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group">
+    {{ form.non_field_errors }}
+    <div class="admin-form-grid">
+      {% for field in form %}
+      <div class="admin-field {% if field.name == 'description' %}full{% endif %}">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
-        {% if field.help_text %}<small style="color:#888;">{{ field.help_text }}</small>{% endif %}
-        {% for error in field.errors %}
-        <span style="color:#f87171; font-size:13px;">{{ error }}</span>
-        {% endfor %}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        {% if field.errors %}<ul class="admin-errors">{{ field.errors }}</ul>{% endif %}
       </div>
-    {% endfor %}
-    <button type="submit" class="button-primary">Save Category</button>
+      {% endfor %}
+    </div>
+    <div class="admin-form-actions">
+      <button type="submit" class="admin-btn">Save Category</button>
+      <a href="{% url 'admin_categories' %}" class="admin-btn-secondary">Cancel</a>
+    </div>
   </form>
-</div>
+</section>
 {% endblock %}

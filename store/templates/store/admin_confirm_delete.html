@@ -1,26 +1,27 @@
-{% extends 'store/base.html' %}
-{% load static %}
+{% extends 'store/admin_base.html' %}
 
-{% block title %}Confirm Delete – Admin Panel{% endblock %}
+{% block title %}Confirm Delete | Prime Fit Admin{% endblock %}
+{% block admin_eyebrow %}Confirm Action{% endblock %}
+{% block admin_title %}Delete {{ object_name|title }}{% endblock %}
+{% block admin_intro %}This action permanently removes the selected item from the admin workspace and storefront data.{% endblock %}
 
-{% block extra_css %}
-<style>
-.confirm-card { background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:18px; padding:28px; max-width:640px; margin-top:20px; color:#0a0a0a; }
-.button-danger, .button-secondary { display:inline-block; padding:12px 22px; border-radius:12px; text-decoration:none; font-weight:700; }
-.button-danger { background:#ef4444; color:#fff; }
-.button-secondary { background:#f4f4f4; color:#0a0a0a; }
-</style>
+{% block admin_actions %}
+<a href="{% url cancel_url %}" class="admin-link-btn">Go Back</a>
 {% endblock %}
 
-{% block content %}
-<div class="confirm-card">
-  <h1 style="color:#fff;">Confirm Delete</h1>
-  <p style="color:#aaa;">Are you sure you want to delete this {{ object_name }}?</p>
-  <p style="color:#fff;font-weight:700;">{{ object }}</p>
-  <form method="post" style="display:flex;gap:12px;margin-top:20px;">
+{% block admin_content %}
+<section class="admin-card admin-confirm-card">
+  <div class="admin-section-head">
+    <div>
+      <div class="admin-section-kicker">Permanent Action</div>
+      <h2 class="admin-section-title">Are you sure?</h2>
+      <p class="admin-section-copy">You are about to delete <strong>{{ object }}</strong>.</p>
+    </div>
+  </div>
+  <form method="post" class="admin-form-actions">
     {% csrf_token %}
-    <button type="submit" class="button-danger">Delete</button>
-    <a href="{% url cancel_url %}" class="button-secondary">Cancel</a>
+    <button type="submit" class="admin-btn-danger">Delete {{ object_name|title }}</button>
+    <a href="{% url cancel_url %}" class="admin-btn-secondary">Cancel</a>
   </form>
-</div>
+</section>
 {% endblock %}

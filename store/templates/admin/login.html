@@ -1,163 +1,40 @@
 {% extends "admin/base_site.html" %}
-{% load static %}
 
-{% block extrastyle %}
-{{ block.super }}
-<style>
-  body {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-  }
-  
-  #login {
-    width: 320px;
-    margin: 60px auto;
-  }
-  
-  #login form {
-    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
-    border: 1px solid rgba(201, 162, 39, 0.2);
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  }
-  
-  #login h1 {
-    color: #C9A227;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 2px;
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  
-  #login .form-row {
-    margin-bottom: 16px;
-  }
-  
-  #login label {
-    color: rgba(255, 255, 255, 0.8);
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    font-weight: 500;
-  }
-  
-  #login input[type="text"],
-  #login input[type="password"] {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid rgba(201, 162, 39, 0.3);
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    font-size: 13px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-  
-  #login input[type="text"]:focus,
-  #login input[type="password"]:focus {
-    outline: none;
-    border-color: #C9A227;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
-  }
-  
-  #login .submit-row {
-    margin-top: 24px;
-  }
-  
-  #login input[type="submit"] {
-    width: 100%;
-    padding: 12px;
-    background: #C9A227;
-    color: #000;
-    border: none;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  #login input[type="submit"]:hover {
-    background: #d4b547;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(201, 162, 39, 0.3);
-  }
-  
-  #login input[type="submit"]:active {
-    transform: translateY(0);
-  }
-  
-  #login .errornote {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 20px;
-    font-size: 13px;
-  }
-  
-  #login ul.errorlist {
-    color: #fca5a5;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  #login ul.errorlist li {
-    margin-bottom: 6px;
-    font-size: 13px;
-  }
-</style>
-{% endblock %}
-
-{% block title %}PRIME FIT Admin Login{% endblock %}
+{% block bodyclass %}{{ block.super }} login pf-login{% endblock %}
 
 {% block content %}
-<div id="login">
-  <form method="post">
-    {% csrf_token %}
-    <h1>⚡ PRIME FIT Admin</h1>
-    
-    {% if form.non_field_errors %}
-    <div class="errornote">
-      {% for error in form.non_field_errors %}
-        {{ error }}
-      {% endfor %}
-    </div>
-    {% endif %}
-    
-    <div class="form-row">
-      {{ form.username.label_tag }}
-      {{ form.username }}
-      {% if form.username.errors %}
-      <ul class="errorlist">
-        {% for error in form.username.errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-      </ul>
+<div class="pf-login-shell">
+  <div class="pf-login-panel">
+    <span class="pf-admin-kicker">Prime Fit Admin</span>
+    <h1>Sign in to the control room</h1>
+    <p>Use your staff account to manage products, orders, content, and customer communication.</p>
+
+    <form method="post" id="login-form">
+      {% csrf_token %}
+      {% if form.errors and not form.non_field_errors %}
+      <p class="errornote">Please correct the error below.</p>
       {% endif %}
-    </div>
-    
-    <div class="form-row">
-      {{ form.password.label_tag }}
-      {{ form.password }}
-      {% if form.password.errors %}
-      <ul class="errorlist">
-        {% for error in form.password.errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-      </ul>
+      {% if form.non_field_errors %}
+      <div class="errornote">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
       {% endif %}
-    </div>
-    
-    <div class="submit-row">
-      <input type="submit" value="Sign in">
-    </div>
-  </form>
+
+      <div class="form-row">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
+      </div>
+      <div class="form-row">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+        <input type="hidden" name="next" value="{{ next }}">
+      </div>
+      <div class="submit-row">
+        <input type="submit" value="Sign in">
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

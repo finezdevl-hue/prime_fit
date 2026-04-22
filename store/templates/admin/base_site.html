@@ -3,15 +3,21 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'store/css/admin_custom.css' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'store/css/admin_custom.css' %}">
 {% endblock %}
 
 {% block branding %}
 <div id="site-name">
-  <a href="{% url 'admin:index' %}" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#C9A227;text-decoration:none">
-    ⚡ PRIME FIT <span style="color:rgba(255,255,255,0.5);font-size:14px;letter-spacing:2px">| Admin Panel</span>
+  <a href="{% url 'admin:index' %}">
+    Prime Fit <span>control room</span>
   </a>
 </div>
+{% endblock %}
+
+{% block userlinks %}
+{{ block.super }}
+<a href="{% url 'home' %}" class="pf-view-site-link">View Site</a>
 {% endblock %}

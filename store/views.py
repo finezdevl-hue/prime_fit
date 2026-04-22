@@ -13,6 +13,18 @@ from .models import (Product, Category, Banner, Cart, CartItem,
 from .forms import CategoryForm, ProductForm, SiteSettingsForm
 
 
+def get_admin_context(active_page, **extra):
+    context = {
+        'admin_active_page': active_page,
+        'admin_total_orders': Order.objects.count(),
+        'admin_total_products': Product.objects.filter(is_active=True).count(),
+        'admin_total_users': User.objects.filter(is_staff=False).count(),
+        'admin_unread_msgs': ContactMessage.objects.filter(is_read=False).count(),
+    }
+    context.update(extra)
+    return context
+
+
 def get_or_create_cart(request):
     if request.user.is_authenticated:
         cart, _ = Cart.objects.get_or_create(user=request.user, session_key=None)
@@ -266,7 +278,7 @@ def admin_panel(request):
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:6]
     recent_orders = Order.objects.order_by('-created_at')[:5]
 
-    context = {
+    context = get_admin_context('dashboard', **{
         'total_orders': total_orders,
         'total_products': total_products,
         'total_users': total_users,
@@ -274,7 +286,7 @@ def admin_panel(request):
         'active_categories': active_categories,
         'featured_products': featured_products,
         'recent_orders': recent_orders,
-    }
+    })
     return render(request, 'store/admin_panel.html', context)
 
 
@@ -284,7 +296,11 @@ def admin_products(request):
     query = request.GET.get('q')
     if query:
         products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    return render(request, 'store/admin_products.html', {'products': products, 'query': query})
+    return render(request, 'store/admin_products.html', get_admin_context(
+        'products',
+        products=products,
+        query=query,
+    ))
 
 
 @staff_member_required(login_url='login')
@@ -297,7 +313,11 @@ def admin_product_form(request, product_id=None):
         form.save()
         messages.success(request, 'Product saved successfully.')
         return redirect('admin_products')
-    return render(request, 'store/admin_product_form.html', {'form': form, 'product': product})
+    return render(request, 'store/admin_product_form.html', get_admin_context(
+        'products',
+        form=form,
+        product=product,
+    ))
 
 
 @staff_member_required(login_url='login')
@@ -307,18 +327,21 @@ def admin_product_delete(request, product_id):
         product.delete()
         messages.success(request, 'Product deleted successfully.')
         return redirect('admin_products')
-    return render(request, 'store/admin_confirm_delete.html', {
+    return render(request, 'store/admin_confirm_delete.html', get_admin_context('products', **{
         'object': product,
         'cancel_url': 'admin_products',
         'delete_url': 'admin_product_delete',
         'object_name': 'product',
-    })
+    }))
 
 
 @staff_member_required(login_url='login')
 def admin_categories(request):
     categories = Category.objects.order_by('name')
-    return render(request, 'store/admin_categories.html', {'categories': categories})
+    return render(request, 'store/admin_categories.html', get_admin_context(
+        'categories',
+        categories=categories,
+    ))
 
 
 @staff_member_required(login_url='login')
@@ -331,7 +354,11 @@ def admin_category_form(request, category_id=None):
         form.save()
         messages.success(request, 'Category saved successfully.')
         return redirect('admin_categories')
-    return render(request, 'store/admin_category_form.html', {'form': form, 'category': category})
+    return render(request, 'store/admin_category_form.html', get_admin_context(
+        'categories',
+        form=form,
+        category=category,
+    ))
 
 
 @staff_member_required(login_url='login')
@@ -341,12 +368,12 @@ def admin_category_delete(request, category_id):
         category.delete()
         messages.success(request, 'Category deleted successfully.')
         return redirect('admin_categories')
-    return render(request, 'store/admin_confirm_delete.html', {
+    return render(request, 'store/admin_confirm_delete.html', get_admin_context('categories', **{
         'object': category,
         'cancel_url': 'admin_categories',
         'delete_url': 'admin_category_delete',
         'object_name': 'category',
-    })
+    }))
 
 
 @staff_member_required(login_url='login')
@@ -357,7 +384,11 @@ def admin_site_settings(request):
         form.save()
         messages.success(request, 'Site settings updated successfully.')
         return redirect('admin_site_settings')
-    return render(request, 'store/admin_site_settings.html', {'form': form, 'settings': settings})
+    return render(request, 'store/admin_site_settings.html', get_admin_context(
+        'settings',
+        form=form,
+        settings=settings,
+    ))
 
 
 @staff_member_required(login_url='login')
@@ -369,11 +400,11 @@ def admin_messages(request):
             Q(name__icontains=query) | Q(email__icontains=query) | Q(subject__icontains=query)
         )
     unread_count = ContactMessage.objects.filter(is_read=False).count()
-    return render(request, 'store/admin_messages.html', {
+    return render(request, 'store/admin_messages.html', get_admin_context('messages', **{
         'messages': messages_list,
         'query': query,
         'unread_count': unread_count
-    })
+    }))
 
 
 @staff_member_required(login_url='login')
@@ -394,7 +425,10 @@ def admin_message_detail(request, message_id):
             messages.success(request, 'Message deleted successfully.')
             return redirect('admin_messages')
         return redirect('admin_message_detail', message_id=message.id)
-    return render(request, 'store/admin_message_detail.html', {'message': message})
+    return render(request, 'store/admin_message_detail.html', get_admin_context(
+        'messages',
+        message=message,
+    ))
 
 
 def register_view(request):

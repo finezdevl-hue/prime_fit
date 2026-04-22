@@ -1,81 +1,76 @@
-{% extends 'store/base.html' %}
-{% load static %}
+{% extends 'store/admin_base.html' %}
 
-{% block title %}Contact Messages – Admin Panel{% endblock %}
+{% block title %}Messages | Prime Fit Admin{% endblock %}
+{% block admin_eyebrow %}Inbox{% endblock %}
+{% block admin_title %}Messages{% endblock %}
+{% block admin_intro %}Review customer conversations, spot unread enquiries, and respond to the issues that need attention first.{% endblock %}
 
-{% block extra_css %}
-<style>
-.admin-table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; }
-.admin-table th, .admin-table td { padding:14px 12px; border-bottom:1px solid rgba(0,0,0,.08); }
-.admin-table th { text-align:left; color:#0a0a0a; font-size:13px; }
-.admin-table td { color:#0a0a0a; font-size:14px; }
-.admin-toolbar { display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:20px; }
-.button-primary, .button-secondary { display:inline-block; padding:10px 18px; border-radius:10px; text-decoration:none; font-weight:700; }
-.button-primary { background:#c9a227; color:#000; }
-.button-secondary { background:#f4f4f4; color:#0a0a0a; border:1px solid rgba(0,0,0,.08); }
-.badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; background:#f4f4f4; color:#0a0a0a; }
-.badge-unread { background:#ef4444; color:#fff; }
-.actions { display:flex; gap:8px; flex-wrap:wrap; }
-.search-form { display:flex; gap:8px; align-items:center; }
-.search-form input { padding:8px 12px; border:1px solid rgba(0,0,0,.12); border-radius:6px; background:#fff; color:#0a0a0a; }
-</style>
+{% block admin_actions %}
+<a href="{% url 'admin_panel' %}" class="admin-link-btn">Dashboard</a>
 {% endblock %}
 
-{% block content %}
-<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-  <div>
-    <h1 style="color:#fff;margin-bottom:6px">Contact Messages</h1>
-    <p style="color:#aaa;margin:0">Manage customer inquiries and support messages.</p>
-  </div>
-  <a href="{% url 'admin_panel' %}" class="button-secondary">Back to Dashboard</a>
-</div>
-
-<div class="admin-toolbar">
-  <div class="search-form">
-    <form method="get">
-      <input type="text" name="q" value="{{ query }}" placeholder="Search messages..." style="min-width:200px;">
-      <button type="submit" class="button-primary" style="padding:8px 16px;">Search</button>
+{% block admin_content %}
+<section class="admin-card">
+  <div class="admin-toolbar">
+    <form method="get" class="admin-search">
+      <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Search by name, email, or subject" class="admin-input">
+      <button type="submit" class="admin-btn">Search</button>
     </form>
+    <span class="admin-badge {% if unread_count > 0 %}danger{% endif %}">{{ unread_count }} unread</span>
   </div>
-  <div>
-    <span class="badge {% if unread_count > 0 %}badge-unread{% endif %}">{{ unread_count }} Unread</span>
-  </div>
-</div>
+</section>
 
-<table class="admin-table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Subject</th>
-      <th>Status</th>
-      <th>Date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for message in messages %}
-    <tr>
-      <td>{{ message.name }}</td>
-      <td>{{ message.email }}</td>
-      <td>{{ message.subject }}</td>
-      <td>
-        {% if message.is_read %}
-        <span class="badge">Read</span>
-        {% else %}
-        <span class="badge badge-unread">Unread</span>
-        {% endif %}
-      </td>
-      <td>{{ message.created_at|date:"M d, Y H:i" }}</td>
-      <td class="actions">
-        <a href="{% url 'admin_message_detail' message.id %}" class="button-secondary" style="padding:6px 12px;font-size:12px;">View</a>
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6" style="text-align:center;padding:40px;color:#666;">No messages found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<section class="admin-card">
+  <div class="admin-section-head">
+    <div>
+      <div class="admin-section-kicker">Support Queue</div>
+      <h2 class="admin-section-title">Conversation List</h2>
+    </div>
+  </div>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Subject</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for message in messages %}
+        <tr>
+          <td>{{ message.name }}</td>
+          <td>{{ message.email }}</td>
+          <td>
+            <div class="admin-list-title">{{ message.subject }}</div>
+            <div class="admin-list-subtext">{{ message.message|truncatechars:70 }}</div>
+          </td>
+          <td>
+            {% if message.is_read %}
+            <span class="admin-badge success">Read</span>
+            {% else %}
+            <span class="admin-badge danger">Unread</span>
+            {% endif %}
+          </td>
+          <td>{{ message.created_at|date:"M d, Y H:i" }}</td>
+          <td><a href="{% url 'admin_message_detail' message.id %}" class="admin-link-btn">Open</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">
+            <div class="admin-empty">
+              <div class="admin-empty-eyebrow">Inbox Clear</div>
+              <h3>No messages found</h3>
+              <p>Try a different search or wait for new customer enquiries.</p>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
 {% endblock %}

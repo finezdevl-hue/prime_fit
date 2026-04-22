@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Prime Fit Admin{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'store/css/custom_admin_panel.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="admin-shell">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <span class="admin-brand-kicker">Prime Fit Operations</span>
+        <h1 class="admin-brand-title">Admin Suite</h1>
+        <p class="admin-brand-subtitle">A focused workspace for inventory, customers, storefront content, and service follow-ups.</p>
+      </div>
+
+      <nav class="admin-nav">
+        <a href="{% url 'admin_panel' %}" class="admin-nav-link {% if admin_active_page == 'dashboard' %}is-active{% endif %}">
+          <div>
+            <strong>Dashboard</strong>
+            <span>Pulse, orders, highlights</span>
+          </div>
+          <span class="admin-nav-count">{{ admin_total_orders }}</span>
+        </a>
+        <a href="{% url 'admin_products' %}" class="admin-nav-link {% if admin_active_page == 'products' %}is-active{% endif %}">
+          <div>
+            <strong>Products</strong>
+            <span>Catalog, pricing, stock</span>
+          </div>
+          <span class="admin-nav-count">{{ admin_total_products }}</span>
+        </a>
+        <a href="{% url 'admin_categories' %}" class="admin-nav-link {% if admin_active_page == 'categories' %}is-active{% endif %}">
+          <div>
+            <strong>Categories</strong>
+            <span>Taxonomy and visibility</span>
+          </div>
+        </a>
+        <a href="{% url 'admin_site_settings' %}" class="admin-nav-link {% if admin_active_page == 'settings' %}is-active{% endif %}">
+          <div>
+            <strong>Site Settings</strong>
+            <span>Homepage story and stats</span>
+          </div>
+        </a>
+        <a href="{% url 'admin_messages' %}" class="admin-nav-link {% if admin_active_page == 'messages' %}is-active{% endif %}">
+          <div>
+            <strong>Messages</strong>
+            <span>Customer conversations</span>
+          </div>
+          <span class="admin-nav-count">{{ admin_unread_msgs }}</span>
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <p>{{ request.user.get_full_name|default:request.user.username }} is signed in with staff access.</p>
+        <div class="admin-actions-row">
+          <a href="/admin/" class="admin-ghost-link">Django Admin</a>
+          <a href="{% url 'home' %}" class="admin-ghost-link">Storefront</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <span class="admin-eyebrow">{% block admin_eyebrow %}Back Office{% endblock %}</span>
+          <h1 class="admin-page-title">{% block admin_title %}Admin{% endblock %}</h1>
+          <p class="admin-page-copy">{% block admin_intro %}Manage the Prime Fit back office from a unified workspace.{% endblock %}</p>
+        </div>
+        <div class="admin-topbar-actions">
+          <a href="{% url 'home' %}" class="admin-link-btn">View Site</a>
+          {% block admin_actions %}{% endblock %}
+        </div>
+      </header>
+
+      <section class="admin-content">
+        {% block admin_content %}{% endblock %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>
